@@ -11,6 +11,10 @@ const memberRoutes = require("./routes/members_simple");
 const calendarRoutes = require("./routes/calendar_simple");
 const aiRoutes = require("./routes/ai");
 
+// Import CRUD routes
+const clubsCrudRoutes = require("./routes/clubs_crud");
+const eventsCrudRoutes = require("./routes/events_crud");
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -43,6 +47,10 @@ app.use("/api/events", eventRoutes);
 app.use("/api/members", memberRoutes);
 app.use("/api/calendar", calendarRoutes);
 app.use("/api/ai", aiRoutes);
+
+// CRUD Routes
+app.use("/api/clubs-crud", clubsCrudRoutes);
+app.use("/api/events-crud", eventsCrudRoutes);
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

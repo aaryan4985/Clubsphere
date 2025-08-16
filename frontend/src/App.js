@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import ChatbotModern from './components/ChatbotModern';
+import AdminDashboard from './components/AdminDashboard';
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen">
         <Routes>
-          <Route path="/" element={<ChatbotModern />} />
-          <Route path="*" element={<ChatbotModern />} />
+          <Route path="/" element={<AdminDashboard />} />
+          <Route path="*" element={<AdminDashboard />} />
         </Routes>
         <Toaster 
           position="top-right"
