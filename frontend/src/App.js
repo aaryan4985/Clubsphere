@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import AdminDashboard from './components/AdminDashboard';
+import ClubMate from './components/ClubMate';
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen">
         <Routes>
-          <Route path="/" element={<AdminDashboard />} />
-          <Route path="*" element={<AdminDashboard />} />
+          <Route path="/" element={<ClubMate />} />
+          <Route path="*" element={<ClubMate />} />
         </Routes>
         <Toaster 
           position="top-right"

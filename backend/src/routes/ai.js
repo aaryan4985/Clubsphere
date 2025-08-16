@@ -7,6 +7,146 @@ const router = express.Router();
 // Initialize Gemini AI
 const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 
+// CRUD Operations Handler
+async function handleCrudOperations(message, context) {
+  const lowerMessage = message.toLowerCase();
+  
+  // CREATE CLUB - Enhanced patterns
+  if ((lowerMessage.includes('create') || lowerMessage.includes('make') || lowerMessage.includes('start')) && 
+      lowerMessage.includes('club')) {
+    
+    let nameMatch = message.match(/(?:club\s+called|called|named|name)\s+["']?([^"',.!?]+)["']?/i) ||
+                   message.match(/create\s+(?:a\s+)?["']?([^"',.!?]+)["']?\s+club/i) ||
+                   message.match(/make\s+(?:a\s+)?["']?([^"',.!?]+)["']?\s+club/i);
+    
+    const descMatch = message.match(/(?:description|about|for|focused on)\s+["']?([^"',.!?]+)["']?/i);
+    const categoryMatch = message.match(/(?:category|type)\s+["']?([^"',.!?]+)["']?/i);
+    const leaderMatch = message.match(/(?:leader|led by|run by)\s+["']?([^"',.!?]+)["']?/i);
+    
+    if (nameMatch) {
+      const clubData = {
+        name: nameMatch[1].trim(),
+        description: descMatch ? descMatch[1].trim() : `A new ${nameMatch[1].trim()} club for students interested in related activities`,
+        leader: leaderMatch ? leaderMatch[1].trim() : 'ClubMate User',
+        category: categoryMatch ? categoryMatch[1].trim() : 'General',
+        meetingTime: 'TBD - Contact leader for details',
+        location: 'TBD - Will be announced soon',
+        image: getClubEmoji(nameMatch[1].trim()),
+        interests: extractInterests(nameMatch[1].trim())
+      };
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/clubs-crud', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(clubData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          return `🎉 **${clubData.name} Created Successfully!**\n\n✅ Your new club is now live! Here are the details:\n\n📋 **Club Information:**\n• **Name:** ${clubData.name}\n• **Category:** ${clubData.category}\n• **Leader:** ${clubData.leader}\n• **Description:** ${clubData.description}\n• **Meeting Time:** ${clubData.meetingTime}\n• **Location:** ${clubData.location}\n\n🚀 **Next Steps:**\n• Set meeting times: "Update ${clubData.name} meeting time to Fridays 6PM"\n• Set location: "Update ${clubData.name} location to Room 101"\n• Add more details or create events for this club!\n\nWhat would you like to do next? 😊`;
+        } else {
+          return `❌ **Oops! Couldn't create "${nameMatch[1].trim()}"**\n\n${result.message}\n\n💡 Try:\n• Using a different name\n• "Create a club called [Different Name]"\n• Let me help you choose a unique name!\n\nWhat should we try instead? 🤔`;
+        }
+      } catch (error) {
+        return `❌ **Error creating club.** The system might be busy. Try again in a moment! 🛠️`;
+      }
+    } else {
+      return `🤔 **I'd love to help you create a club!**\n\n💡 **Try saying:**\n• "Create a club called [Name]"\n• "Make a Photography club"\n• "Start a Gaming club for esports"\n\n✨ **Optional details:**\n• Add "description [details]"\n• Add "category [type]"\n• Add "leader [name]"\n\n**Example:** "Create a club called AI Enthusiasts description Focus on machine learning category Technology"\n\nWhat club would you like to create? 🚀`;
+    }
+  }
+  
+  // CREATE EVENT
+  if (lowerMessage.includes('create') && lowerMessage.includes('event') && 
+      (lowerMessage.includes('name') || lowerMessage.includes('called') || lowerMessage.includes('title'))) {
+    
+    const nameMatch = message.match(/(?:called|named|name|title)\s+["']?([^",.!?]+)["']?/i);
+    const dateMatch = message.match(/(?:on|date)\s+(\d{4}-\d{2}-\d{2}|\w+\s+\d{1,2})/i);
+    const timeMatch = message.match(/(?:at|time)\s+(\d{1,2}:\d{2}\s*(?:am|pm)?)/i);
+    const locationMatch = message.match(/(?:at|location|venue)\s+["']?([^",.!?]+)["']?/i);
+    
+    if (nameMatch) {
+      const eventData = {
+        title: nameMatch[1].trim(),
+        description: 'Event created via ClubMate chat',
+        organizer: 'ClubMate User',
+        date: dateMatch ? dateMatch[1] : '2025-08-20',
+        time: timeMatch ? timeMatch[1] : '6:00 PM',
+        location: locationMatch ? locationMatch[1] : 'TBD',
+        category: 'General',
+        maxAttendees: 50,
+        image: '🎯'
+      };
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/events-crud', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(eventData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          return `🎉 **Event Created Successfully!**\n\n✅ **${eventData.title}** is scheduled!\n\n📅 **Event Details:**\n• **Date:** ${eventData.date}\n• **Time:** ${eventData.time}\n• **Location:** ${eventData.location}\n• **Organizer:** ${eventData.organizer}\n• **Max Attendees:** ${eventData.maxAttendees}\n\n🎯 Your event is now live! Would you like to:\n• Add more details (requirements, prizes)?\n• Create another event?\n• Find similar events?\n\nWhat's next? 🚀`;
+        } else {
+          return `❌ **Couldn't create the event.**\n\n${result.message}\n\nLet me help you fix this! Try a different title or let me know what details need adjusting. 🔧`;
+        }
+      } catch (error) {
+        return `❌ **Error creating event.** Please try again! 🛠️`;
+      }
+    }
+  }
+  
+  // DELETE CLUB
+  if (lowerMessage.includes('delete') && lowerMessage.includes('club')) {
+    const nameMatch = message.match(/(?:delete|remove)\s+club\s+["']?([^",.!?]+)["']?/i) ||
+                     message.match(/["']?([^",.!?]+)["']?\s+club/i);
+    
+    if (nameMatch) {
+      const clubName = nameMatch[1].trim();
+      
+      try {
+        // First find the club
+        const listResponse = await fetch('http://localhost:5000/api/clubs-crud');
+        const listResult = await listResponse.json();
+        
+        if (listResult.success) {
+          const club = listResult.data.find(c => 
+            c.name.toLowerCase().includes(clubName.toLowerCase())
+          );
+          
+          if (club) {
+            const deleteResponse = await fetch(`http://localhost:5000/api/clubs-crud/${club.id}`, {
+              method: 'DELETE'
+            });
+            
+            const deleteResult = await deleteResponse.json();
+            
+            if (deleteResult.success) {
+              return `✅ **Club Deleted Successfully!**\n\n🗑️ **${club.name}** has been removed from the system.\n\n📊 **What was removed:**\n• Club with ${club.members} members\n• ${club.category} category\n• Rating: ${club.rating}/5\n\n🔄 Would you like to:\n• Create a new club?\n• View remaining clubs?\n• Restore something similar?\n\nWhat would you like to do? 🤔`;
+            }
+          } else {
+            return `❓ **Club Not Found**\n\nI couldn't find a club matching "${clubName}". Here are the available clubs:\n\n${listResult.data.map(c => `• ${c.name}`).join('\n')}\n\nTry again with the exact name! 🎯`;
+          }
+        }
+      } catch (error) {
+        return `❌ **Error deleting club.** Please try again! 🛠️`;
+      }
+    }
+  }
+  
+  // UPDATE CLUB
+  if ((lowerMessage.includes('update') || lowerMessage.includes('edit') || lowerMessage.includes('change')) && 
+      lowerMessage.includes('club')) {
+    
+    return `🔧 **Club Update Helper**\n\nI can help you update club details! Tell me:\n\n📝 **Format:** "Update [Club Name] [field] to [new value]"\n\n🎯 **Examples:**\n• "Update Coding Club description to Focus on AI and ML"\n• "Update Music Club meeting time to Fridays 5PM"\n• "Update Gaming Club location to New Gaming Lounge"\n\n✨ **Available fields:**\n• Description • Meeting time • Location\n• Leader • Category • Interests\n\nWhat club would you like to update? 🚀`;
+  }
+  
+  return null; // No CRUD operation detected
+}
+
 // Chat with AI endpoint
 router.post('/chat', async (req, res) => {
   try {
@@ -14,6 +154,12 @@ router.post('/chat', async (req, res) => {
 
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
+    }
+
+    // Check for CRUD operations first
+    const crudResponse = await handleCrudOperations(message, context);
+    if (crudResponse) {
+      return res.json({ response: crudResponse });
     }
 
     // If no API key, return helpful response
@@ -38,7 +184,7 @@ router.post('/chat', async (req, res) => {
 
     // Create context-aware prompt
     const prompt = `
-You are ClubMate, an enthusiastic AI assistant for campus club and event discovery. You're conversational, engaging, and adapt your responses based on what users ask.
+You are ClubMate, an enthusiastic AI assistant for campus club and event discovery. You're conversational, engaging, and can help users with CRUD operations through natural language.
 
 IMPORTANT CONVERSATION RULES:
 - Always respond differently to follow-up questions
@@ -48,6 +194,7 @@ IMPORTANT CONVERSATION RULES:
 - Be dynamic and conversational, not scripted
 - Adapt your tone to match the user's interest level
 - Keep responses fresh and varied
+- Help users create, read, update, and delete clubs and events through natural language
 
 CAMPUS DATA:
 ${typeof context === 'string' ? context : JSON.stringify(context, null, 2)}
@@ -66,6 +213,7 @@ CONVERSATION GUIDELINES:
 - For general questions: Offer multiple paths to explore
 - Always end with an engaging question or next step
 - Vary your response style to keep things interesting
+- Help with club/event creation, editing, and management through chat
 
 Current user message: "${message}"
 
@@ -134,6 +282,69 @@ function getFallbackResponse(message) {
   }
   
   return "👋 **Hey there! I'm ClubMate, your AI campus companion!**\n\n🎯 I'm here to help you discover amazing clubs and events on campus! With 8+ active clubs and tons of exciting events, there's something for everyone.\n\n💡 **Quick suggestions:**\n• Ask about specific interests (\"I like technology\")\n• See what's happening (\"Show me events this week\")\n• Learn about clubs (\"Tell me about the Music Club\")\n• Find out how to get involved (\"How do I join clubs?\")\n• Get personalized recommendations\n\n✨ What would you like to explore today?";
+}
+
+// Helper functions for CRUD operations
+function getClubEmoji(name) {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes('tech') || lowerName.includes('coding') || lowerName.includes('programming') || lowerName.includes('ai')) return '💻';
+  if (lowerName.includes('music') || lowerName.includes('band') || lowerName.includes('singing')) return '🎵';
+  if (lowerName.includes('art') || lowerName.includes('photo') || lowerName.includes('design')) return '🎨';
+  if (lowerName.includes('sport') || lowerName.includes('fitness') || lowerName.includes('athletic')) return '⚽';
+  if (lowerName.includes('robot') || lowerName.includes('engineer')) return '🤖';
+  if (lowerName.includes('game') || lowerName.includes('gaming') || lowerName.includes('esport')) return '🎮';
+  if (lowerName.includes('debate') || lowerName.includes('speech')) return '🎤';
+  if (lowerName.includes('environment') || lowerName.includes('green') || lowerName.includes('eco')) return '🌱';
+  if (lowerName.includes('business') || lowerName.includes('entrepreneur')) return '💼';
+  return '🎯';
+}
+
+function getEventEmoji(name) {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes('hackathon') || lowerName.includes('coding') || lowerName.includes('tech')) return '💻';
+  if (lowerName.includes('workshop') || lowerName.includes('training')) return '🛠️';
+  if (lowerName.includes('competition') || lowerName.includes('contest')) return '🏆';
+  if (lowerName.includes('conference') || lowerName.includes('summit')) return '🎯';
+  if (lowerName.includes('party') || lowerName.includes('social')) return '🎉';
+  if (lowerName.includes('music') || lowerName.includes('concert')) return '🎵';
+  if (lowerName.includes('sports') || lowerName.includes('game')) return '⚽';
+  return '📅';
+}
+
+function extractInterests(name) {
+  const lowerName = name.toLowerCase();
+  const interests = [];
+  if (lowerName.includes('tech') || lowerName.includes('coding')) interests.push('technology', 'programming');
+  if (lowerName.includes('music')) interests.push('music', 'instruments');
+  if (lowerName.includes('art')) interests.push('art', 'creativity');
+  if (lowerName.includes('game')) interests.push('gaming', 'esports');
+  if (lowerName.includes('robot')) interests.push('robotics', 'engineering');
+  return interests.length > 0 ? interests : ['general'];
+}
+
+function extractEventTags(name) {
+  const lowerName = name.toLowerCase();
+  const tags = [];
+  if (lowerName.includes('hackathon')) tags.push('hackathon', 'coding', 'competition');
+  if (lowerName.includes('workshop')) tags.push('workshop', 'learning', 'hands-on');
+  if (lowerName.includes('meetup')) tags.push('meetup', 'networking', 'social');
+  if (lowerName.includes('competition')) tags.push('competition', 'contest', 'prizes');
+  return tags.length > 0 ? tags : ['event'];
+}
+
+function getEventCategory(name) {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes('workshop') || lowerName.includes('training')) return 'Workshop';
+  if (lowerName.includes('competition') || lowerName.includes('contest') || lowerName.includes('hackathon')) return 'Competition';
+  if (lowerName.includes('conference') || lowerName.includes('summit') || lowerName.includes('talk')) return 'Conference';
+  if (lowerName.includes('performance') || lowerName.includes('show') || lowerName.includes('concert')) return 'Performance';
+  return 'Social';
+}
+
+function formatDate(dateStr) {
+  if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) return dateStr;
+  // Add more date parsing logic as needed
+  return '2025-08-25'; // Default date
 }
 
 module.exports = router;

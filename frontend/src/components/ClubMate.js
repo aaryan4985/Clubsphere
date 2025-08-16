@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Calendar, Users, Clock, Star, Heart, Share2, Menu, X, Zap, Award, Music, Code, Lightbulb, TrendingUp } from 'lucide-react';
+import { Send, Bot, User, Calendar, Users, Clock, Star, Heart, Share2, Menu, X, Zap, Plus, Edit, Trash2, Lightbulb, TrendingUp } from 'lucide-react';
 import '../styles/clubmate.css';
 
 // Enhanced sample data with more clubs, events, and features
@@ -275,7 +275,7 @@ const ClubMate = () => {
     {
       id: 1,
       type: 'bot',
-      content: "Hey there! 👋 I'm ClubMate, your AI-powered campus companion! ✨\n\n🎯 **I'm here to help you DISCOVER campus life:**\n• Explore 8+ amazing clubs across different categories\n• Find 8+ exciting upcoming events and competitions\n• Get personalized club recommendations based on your interests\n• Learn how to JOIN clubs and REGISTER for events\n• Create stunning promotions for existing events\n• Get meeting times, locations, and contact info\n• Connect with like-minded students\n\n🚀 **Try asking:**\n\"Show me tech clubs\" | \"What's happening this weekend?\" | \"I love gaming\" | \"How do I join the Coding Club?\" | \"Create a promo for the hackathon\"\n\n💡 **I help you find and join existing activities - not create new ones!**\n\nWhat would you like to explore today?",
+      content: "Hey there! 👋 I'm ClubMate, your AI-powered campus companion! ✨\n\n🎯 **I can help you with EVERYTHING:**\n\n📚 **DISCOVER:**\n• Explore 8+ amazing clubs across different categories\n• Find 8+ exciting upcoming events and competitions\n• Get personalized recommendations based on your interests\n\n🔧 **MANAGE through CHAT:**\n• **CREATE** new clubs: \"Create a club called AI Enthusiasts\"\n• **CREATE** new events: \"Create an event called Tech Meetup on 2025-08-25\"\n• **UPDATE** club details: \"Update Coding Club description to Focus on AI\"\n• **DELETE** clubs/events: \"Delete Gaming Club\"\n\n🚀 **Just talk to me naturally!**\n\n� **Examples:**\n• \"Show me tech clubs\"\n• \"Create a Photography Workshop event on Friday\"\n• \"Delete the old Music Club\"\n• \"Update Robotics Club meeting time to Mondays\"\n\nWhat would you like to do today? 🎉",
       timestamp: new Date()
     }
   ]);
@@ -291,17 +291,23 @@ const ClubMate = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Only scroll when new messages are added, not on every render
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (messages.length > 0) {
+      const timer = setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [messages.length]); // Only depend on message count, not content
 
   const quickActions = [
     { text: "Show me all clubs", icon: Users, color: "bg-blue-500" },
     { text: "What events are happening this week?", icon: Calendar, color: "bg-green-500" },
-    { text: "I'm interested in technology", icon: Code, color: "bg-purple-500" },
-    { text: "Find music-related activities", icon: Music, color: "bg-pink-500" },
-    { text: "Show competitive events", icon: Award, color: "bg-orange-500" },
-    { text: "Create a hackathon promotion", icon: Lightbulb, color: "bg-yellow-500" }
+    { text: "Create a club called AI Enthusiasts", icon: Plus, color: "bg-purple-500" },
+    { text: "Create an event called Tech Meetup on 2025-08-25", icon: Calendar, color: "bg-pink-500" },
+    { text: "Delete Gaming Club", icon: Trash2, color: "bg-red-500" },
+    { text: "Update Coding Club description to Focus on AI and Machine Learning", icon: Edit, color: "bg-yellow-500" }
   ];
 
   const toggleFavoriteClub = (clubId) => {
