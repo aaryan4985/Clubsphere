@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Calendar, Users, Clock, Star, Heart, Share2, Menu, X, Zap, Plus, Edit, Trash2, Lightbulb, TrendingUp } from 'lucide-react';
+import { Send, Bot, User, Calendar, Users, Clock, Star, Heart, Share2, Menu, X, Zap, Plus, Edit, Trash2, Lightbulb, TrendingUp, Mic, MicOff } from 'lucide-react';
 import '../styles/clubmate.css';
 
 // Enhanced sample data with more clubs, events, and features
@@ -285,6 +285,8 @@ const ClubMate = () => {
   const [favoriteClubs, setFavoriteClubs] = useState([]);
   const [favoriteEvents, setFavoriteEvents] = useState([]);
   const [showQuickActions, setShowQuickActions] = useState(true);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recognition, setRecognition] = useState(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -301,13 +303,99 @@ const ClubMate = () => {
     }
   }, [messages.length]); // Only depend on message count, not content
 
+  // Initialize speech recognition
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognitionInstance = new SpeechRecognition();
+      
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = true;
+      recognitionInstance.lang = 'en-US';
+      recognitionInstance.maxAlternatives = 1;
+      
+      recognitionInstance.onstart = () => {
+        console.log('Speech recognition started');
+        setIsRecording(true);
+      };
+      
+      recognitionInstance.onresult = (event) => {
+        console.log('Speech recognition result:', event);
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            transcript += event.results[i][0].transcript;
+          }
+        }
+        if (transcript) {
+          console.log('Final transcript:', transcript);
+          setInputText(prev => prev + transcript);
+        }
+      };
+      
+      recognitionInstance.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        setIsRecording(false);
+        if (event.error === 'not-allowed') {
+          alert('Microphone access denied. Please allow microphone access and try again.');
+        } else if (event.error === 'no-speech') {
+          alert('No speech detected. Please try again and speak clearly.');
+        } else {
+          alert(`Speech recognition error: ${event.error}`);
+        }
+      };
+      
+      recognitionInstance.onend = () => {
+        console.log('Speech recognition ended');
+        setIsRecording(false);
+      };
+      
+      setRecognition(recognitionInstance);
+    } else {
+      console.warn('Speech recognition not supported in this browser');
+    }
+  }, []);
+
+  // Voice recording functions
+  const startRecording = async () => {
+    if (!recognition) {
+      alert('Speech recognition is not supported in your browser. Please try Chrome or Edge.');
+      return;
+    }
+
+    try {
+      // Request microphone permission first
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      console.log('Starting speech recognition');
+      recognition.start();
+    } catch (error) {
+      console.error('Error starting recognition:', error);
+      if (error.name === 'NotAllowedError') {
+        alert('Microphone access denied. Please allow microphone access in your browser settings and try again.');
+      } else if (error.name === 'NotFoundError') {
+        alert('No microphone found. Please connect a microphone and try again.');
+      } else {
+        alert('Failed to start voice recording. Please check your microphone and try again.');
+      }
+    }
+  };
+
+  const stopRecording = () => {
+    if (recognition && isRecording) {
+      console.log('Stopping speech recognition');
+      recognition.stop();
+    }
+  };
+
   const quickActions = [
     { text: "Show me all clubs", icon: Users, color: "bg-blue-500" },
     { text: "What events are happening this week?", icon: Calendar, color: "bg-green-500" },
     { text: "Create a club called AI Enthusiasts", icon: Plus, color: "bg-purple-500" },
     { text: "Create an event called Tech Meetup on 2025-08-25", icon: Calendar, color: "bg-pink-500" },
     { text: "Delete Gaming Club", icon: Trash2, color: "bg-red-500" },
-    { text: "Update Coding Club description to Focus on AI and Machine Learning", icon: Edit, color: "bg-yellow-500" }
+    { text: "Update Coding Club description to Focus on AI and Machine Learning", icon: Edit, color: "bg-yellow-500" },
+    { text: "🎤 Test Voice Input", icon: Mic, color: "bg-indigo-500", action: "voice-test" }
   ];
 
   const toggleFavoriteClub = (clubId) => {
@@ -464,6 +552,26 @@ Respond in an enthusiastic, helpful manner with rich details and actionable info
   };
 
   const handleQuickAction = (actionText) => {
+    // Handle voice test action
+    if (actionText === "🎤 Test Voice Input") {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(() => {
+              alert('✅ Microphone access granted! Voice input should work. Try clicking the microphone button.');
+            })
+            .catch((error) => {
+              alert(`❌ Microphone access failed: ${error.message}. Please allow microphone access in your browser.`);
+            });
+        } else {
+          alert('❌ getUserMedia not supported in this browser.');
+        }
+      } else {
+        alert('❌ Speech recognition not supported. Please use Chrome, Edge, or Safari.');
+      }
+      return;
+    }
+
     setInputText(actionText);
     // Auto-send the message
     setTimeout(() => {
@@ -646,6 +754,35 @@ Respond in an enthusiastic, helpful manner with rich details and actionable info
 
               {/* Enhanced Input Area */}
               <div className="border-t border-gray-200/50 p-6 bg-white/80 backdrop-blur-sm">
+                {/* Recording indicator */}
+                {isRecording && (
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center justify-between animate-pulse">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                      <span className="text-red-700 font-medium">🎤 Listening... Speak now!</span>
+                      <span className="text-red-500 text-sm">(Make sure your microphone is enabled)</span>
+                    </div>
+                    <button
+                      onClick={stopRecording}
+                      className="text-red-600 hover:text-red-800 text-sm underline font-medium"
+                    >
+                      Stop Recording
+                    </button>
+                  </div>
+                )}
+
+                {/* Browser compatibility notice */}
+                {!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) && (
+                  <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-yellow-700 font-medium">⚠️ Voice input not supported</span>
+                    </div>
+                    <p className="text-yellow-600 text-sm mt-1">
+                      Please use Chrome, Edge, or Safari for voice input functionality.
+                    </p>
+                  </div>
+                )}
+                
                 <div className="flex space-x-4">
                   <div className="flex-1 relative">
                     <textarea
@@ -658,7 +795,34 @@ Respond in an enthusiastic, helpful manner with rich details and actionable info
                       disabled={isLoading}
                     />
                     <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-2">
-                      <button className="p-2 text-gray-400 hover:text-blue-500 transition-colors">
+                      <button
+                        onClick={isRecording ? stopRecording : startRecording}
+                        disabled={!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)}
+                        className={`voice-button p-2 rounded-full transition-all duration-200 ${
+                          !('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
+                            ? 'text-gray-300 cursor-not-allowed bg-gray-100'
+                            : isRecording 
+                              ? 'text-red-500 bg-red-50 hover:bg-red-100 recording-animation recording-indicator' 
+                              : 'text-gray-400 hover:text-blue-500 hover:bg-blue-50'
+                        }`}
+                        title={
+                          !('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
+                            ? 'Voice input not supported in this browser'
+                            : isRecording 
+                              ? 'Stop recording (click to stop)' 
+                              : 'Start voice input (click to speak)'
+                        }
+                      >
+                        {isRecording ? (
+                          <MicOff className="w-5 h-5" />
+                        ) : (
+                          <Mic className="w-5 h-5" />
+                        )}
+                      </button>
+                      <button 
+                        className="p-2 text-gray-400 hover:text-blue-500 transition-colors"
+                        title="Quick suggestions"
+                      >
                         <Lightbulb className="w-5 h-5" />
                       </button>
                     </div>
