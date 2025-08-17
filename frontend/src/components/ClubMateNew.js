@@ -1,6 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Calendar, Users, Clock, Star, Heart, Share2, Menu, X, Zap, Plus, Edit, Trash2, Lightbulb, TrendingUp, Mic, MicOff } from 'lucide-react';
-import '../styles/clubmate.css';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Send,
+  Bot,
+  User,
+  Calendar,
+  Users,
+  Clock,
+  Star,
+  Heart,
+  Share2,
+  Menu,
+  X,
+  Zap,
+  Plus,
+  Edit,
+  Trash2,
+  Lightbulb,
+  TrendingUp,
+  Mic,
+  MicOff,
+} from "lucide-react";
+import "../styles/clubmate.css";
 
 // Enhanced sample data with more clubs, events, and features
 const sampleData = {
@@ -8,7 +28,8 @@ const sampleData = {
     {
       id: 1,
       name: "Coding Club",
-      description: "Learn programming, build projects, and participate in hackathons",
+      description:
+        "Learn programming, build projects, and participate in hackathons",
       leader: "Alex Johnson",
       members: 145,
       meetingTime: "Wednesdays 6:00 PM",
@@ -16,15 +37,30 @@ const sampleData = {
       category: "Technology",
       rating: 4.8,
       image: "🖥️",
-      interests: ["programming", "coding", "software", "hackathons", "tech", "development", "javascript", "python", "react"],
+      interests: [
+        "programming",
+        "coding",
+        "software",
+        "hackathons",
+        "tech",
+        "development",
+        "javascript",
+        "python",
+        "react",
+      ],
       upcomingMeetings: ["Aug 21", "Aug 28", "Sep 4"],
-      achievements: ["Won Inter-College Hackathon 2024", "50+ projects completed", "Industry partnerships"],
-      socialLinks: { discord: "#coding-club", instagram: "@codingclub_campus" }
+      achievements: [
+        "Won Inter-College Hackathon 2024",
+        "50+ projects completed",
+        "Industry partnerships",
+      ],
+      socialLinks: { discord: "#coding-club", instagram: "@codingclub_campus" },
     },
     {
       id: 2,
       name: "Music Club",
-      description: "Express creativity through various musical instruments and vocals",
+      description:
+        "Express creativity through various musical instruments and vocals",
       leader: "Sarah Chen",
       members: 89,
       meetingTime: "Fridays 4:00 PM",
@@ -32,10 +68,24 @@ const sampleData = {
       category: "Arts",
       rating: 4.7,
       image: "🎵",
-      interests: ["music", "singing", "instruments", "band", "performance", "guitar", "piano", "drums", "vocals"],
+      interests: [
+        "music",
+        "singing",
+        "instruments",
+        "band",
+        "performance",
+        "guitar",
+        "piano",
+        "drums",
+        "vocals",
+      ],
       upcomingMeetings: ["Aug 23", "Aug 30", "Sep 6"],
-      achievements: ["Annual Concert 500+ audience", "Regional Music Competition Winners", "10+ bands formed"],
-      socialLinks: { youtube: "MusicClubCampus", instagram: "@campusmusic" }
+      achievements: [
+        "Annual Concert 500+ audience",
+        "Regional Music Competition Winners",
+        "10+ bands formed",
+      ],
+      socialLinks: { youtube: "MusicClubCampus", instagram: "@campusmusic" },
     },
     {
       id: 3,
@@ -48,10 +98,23 @@ const sampleData = {
       category: "Engineering",
       rating: 4.9,
       image: "🤖",
-      interests: ["robotics", "engineering", "programming", "automation", "arduino", "sensors", "AI", "competitions"],
+      interests: [
+        "robotics",
+        "engineering",
+        "programming",
+        "automation",
+        "arduino",
+        "sensors",
+        "AI",
+        "competitions",
+      ],
       upcomingMeetings: ["Aug 20", "Aug 22", "Aug 27"],
-      achievements: ["National Champions 2024", "15+ competition wins", "Patent filed for innovation"],
-      socialLinks: { discord: "#robotics-hub", instagram: "@campusrobotics" }
+      achievements: [
+        "National Champions 2024",
+        "15+ competition wins",
+        "Patent filed for innovation",
+      ],
+      socialLinks: { discord: "#robotics-hub", instagram: "@campusrobotics" },
     },
     {
       id: 4,
@@ -64,10 +127,26 @@ const sampleData = {
       category: "Arts",
       rating: 4.6,
       image: "📸",
-      interests: ["photography", "art", "creativity", "portraits", "landscape", "editing", "photoshop", "exhibitions"],
+      interests: [
+        "photography",
+        "art",
+        "creativity",
+        "portraits",
+        "landscape",
+        "editing",
+        "photoshop",
+        "exhibitions",
+      ],
       upcomingMeetings: ["Aug 24", "Aug 31", "Sep 7"],
-      achievements: ["Campus Photo Exhibition", "Photography Contest Winners", "Professional workshops"],
-      socialLinks: { instagram: "@campusphotography", flickr: "CampusPhotoClub" }
+      achievements: [
+        "Campus Photo Exhibition",
+        "Photography Contest Winners",
+        "Professional workshops",
+      ],
+      socialLinks: {
+        instagram: "@campusphotography",
+        flickr: "CampusPhotoClub",
+      },
     },
     {
       id: 5,
@@ -80,10 +159,25 @@ const sampleData = {
       category: "Academic",
       rating: 4.5,
       image: "🎤",
-      interests: ["debate", "public speaking", "critical thinking", "argumentation", "politics", "current events", "rhetoric"],
+      interests: [
+        "debate",
+        "public speaking",
+        "critical thinking",
+        "argumentation",
+        "politics",
+        "current events",
+        "rhetoric",
+      ],
       upcomingMeetings: ["Aug 19", "Aug 26", "Sep 2"],
-      achievements: ["Inter-College Debate Champions", "Model UN participation", "Leadership development"],
-      socialLinks: { discord: "#debate-society", linkedin: "Campus Debate Society" }
+      achievements: [
+        "Inter-College Debate Champions",
+        "Model UN participation",
+        "Leadership development",
+      ],
+      socialLinks: {
+        discord: "#debate-society",
+        linkedin: "Campus Debate Society",
+      },
     },
     {
       id: 6,
@@ -96,10 +190,22 @@ const sampleData = {
       category: "Social Impact",
       rating: 4.8,
       image: "🌱",
-      interests: ["environment", "sustainability", "climate", "conservation", "recycling", "green energy", "activism"],
+      interests: [
+        "environment",
+        "sustainability",
+        "climate",
+        "conservation",
+        "recycling",
+        "green energy",
+        "activism",
+      ],
       upcomingMeetings: ["Aug 21", "Aug 28", "Sep 4"],
-      achievements: ["Campus Carbon Neutral Initiative", "Tree planting drives", "Waste reduction programs"],
-      socialLinks: { instagram: "@greencampus", twitter: "@EcoClubCampus" }
+      achievements: [
+        "Campus Carbon Neutral Initiative",
+        "Tree planting drives",
+        "Waste reduction programs",
+      ],
+      socialLinks: { instagram: "@greencampus", twitter: "@EcoClubCampus" },
     },
     {
       id: 7,
@@ -112,10 +218,26 @@ const sampleData = {
       category: "Business",
       rating: 4.7,
       image: "💡",
-      interests: ["entrepreneurship", "startups", "innovation", "business", "pitch", "funding", "networking", "leadership"],
+      interests: [
+        "entrepreneurship",
+        "startups",
+        "innovation",
+        "business",
+        "pitch",
+        "funding",
+        "networking",
+        "leadership",
+      ],
       upcomingMeetings: ["Aug 22", "Aug 29", "Sep 5"],
-      achievements: ["5 startups launched", "$50K funding secured", "Mentor network established"],
-      socialLinks: { linkedin: "Campus Entrepreneurs", discord: "#startup-hub" }
+      achievements: [
+        "5 startups launched",
+        "$50K funding secured",
+        "Mentor network established",
+      ],
+      socialLinks: {
+        linkedin: "Campus Entrepreneurs",
+        discord: "#startup-hub",
+      },
     },
     {
       id: 8,
@@ -128,17 +250,31 @@ const sampleData = {
       category: "Gaming",
       rating: 4.9,
       image: "🎮",
-      interests: ["gaming", "esports", "game development", "tournaments", "streaming", "competitive", "unity", "unreal"],
+      interests: [
+        "gaming",
+        "esports",
+        "game development",
+        "tournaments",
+        "streaming",
+        "competitive",
+        "unity",
+        "unreal",
+      ],
       upcomingMeetings: ["Daily sessions", "Tournament prep", "Dev workshops"],
-      achievements: ["Regional Esports Champions", "Game dev showcase", "Twitch partnership"],
-      socialLinks: { twitch: "CampusGamingClub", discord: "#gaming-central" }
-    }
+      achievements: [
+        "Regional Esports Champions",
+        "Game dev showcase",
+        "Twitch partnership",
+      ],
+      socialLinks: { twitch: "CampusGamingClub", discord: "#gaming-central" },
+    },
   ],
   events: [
     {
       id: 1,
       title: "Hackathon 2025: AI Revolution",
-      description: "24-hour coding marathon focused on AI and machine learning solutions",
+      description:
+        "24-hour coding marathon focused on AI and machine learning solutions",
       club: "Coding Club",
       date: "2025-08-25",
       time: "9:00 AM - 9:00 PM",
@@ -147,17 +283,26 @@ const sampleData = {
       maxParticipants: 200,
       currentRegistrations: 156,
       difficulty: "Intermediate",
-      prizes: ["$5000 First Prize", "Internship opportunities", "Mentorship programs"],
-      requirements: ["Laptop required", "Programming experience preferred", "Teams of 2-4"],
+      prizes: [
+        "$5000 First Prize",
+        "Internship opportunities",
+        "Mentorship programs",
+      ],
+      requirements: [
+        "Laptop required",
+        "Programming experience preferred",
+        "Teams of 2-4",
+      ],
       image: "💻",
       organizer: "Alex Johnson",
       registrationDeadline: "2025-08-20",
-      tags: ["hackathon", "AI", "coding", "competition", "prizes"]
+      tags: ["hackathon", "AI", "coding", "competition", "prizes"],
     },
     {
       id: 2,
       title: "Open Mic Night: Acoustic Vibes",
-      description: "Showcase your musical talents in a cozy, supportive environment",
+      description:
+        "Showcase your musical talents in a cozy, supportive environment",
       club: "Music Club",
       date: "2025-08-22",
       time: "7:00 PM - 10:00 PM",
@@ -166,12 +311,20 @@ const sampleData = {
       maxParticipants: 50,
       currentRegistrations: 32,
       difficulty: "All Levels",
-      prizes: ["Audience Choice Award", "Recording studio session", "Performance opportunities"],
-      requirements: ["Bring your instrument", "2-song maximum", "Original content encouraged"],
+      prizes: [
+        "Audience Choice Award",
+        "Recording studio session",
+        "Performance opportunities",
+      ],
+      requirements: [
+        "Bring your instrument",
+        "2-song maximum",
+        "Original content encouraged",
+      ],
       image: "🎤",
       organizer: "Sarah Chen",
       registrationDeadline: "2025-08-21",
-      tags: ["music", "performance", "acoustic", "talent show"]
+      tags: ["music", "performance", "acoustic", "talent show"],
     },
     {
       id: 3,
@@ -185,12 +338,20 @@ const sampleData = {
       maxParticipants: 32,
       currentRegistrations: 28,
       difficulty: "Advanced",
-      prizes: ["Championship trophy", "Arduino starter kits", "Tech industry visits"],
-      requirements: ["Self-built robot required", "Weight limit: 5kg", "Safety regulations apply"],
+      prizes: [
+        "Championship trophy",
+        "Arduino starter kits",
+        "Tech industry visits",
+      ],
+      requirements: [
+        "Self-built robot required",
+        "Weight limit: 5kg",
+        "Safety regulations apply",
+      ],
       image: "⚔️",
       organizer: "Mike Rodriguez",
       registrationDeadline: "2025-08-25",
-      tags: ["robotics", "battle", "competition", "engineering"]
+      tags: ["robotics", "battle", "competition", "engineering"],
     },
     {
       id: 4,
@@ -204,17 +365,26 @@ const sampleData = {
       maxParticipants: 25,
       currentRegistrations: 18,
       difficulty: "Beginner",
-      prizes: ["Certificate of completion", "Photography portfolio review", "Equipment discounts"],
-      requirements: ["Camera (DSLR/Mirrorless preferred)", "Notebook for notes", "Enthusiasm to learn"],
+      prizes: [
+        "Certificate of completion",
+        "Photography portfolio review",
+        "Equipment discounts",
+      ],
+      requirements: [
+        "Camera (DSLR/Mirrorless preferred)",
+        "Notebook for notes",
+        "Enthusiasm to learn",
+      ],
       image: "📷",
       organizer: "Emma Davis",
       registrationDeadline: "2025-08-18",
-      tags: ["photography", "workshop", "portrait", "learning"]
+      tags: ["photography", "workshop", "portrait", "learning"],
     },
     {
       id: 5,
       title: "Startup Pitch Competition",
-      description: "Present your startup ideas to real investors and industry experts",
+      description:
+        "Present your startup ideas to real investors and industry experts",
       club: "Entrepreneurship Club",
       date: "2025-08-26",
       time: "5:00 PM - 9:00 PM",
@@ -223,17 +393,26 @@ const sampleData = {
       maxParticipants: 15,
       currentRegistrations: 12,
       difficulty: "Advanced",
-      prizes: ["$10,000 seed funding", "Mentorship program", "Incubator placement"],
-      requirements: ["Business plan required", "5-minute pitch presentation", "Financial projections"],
+      prizes: [
+        "$10,000 seed funding",
+        "Mentorship program",
+        "Incubator placement",
+      ],
+      requirements: [
+        "Business plan required",
+        "5-minute pitch presentation",
+        "Financial projections",
+      ],
       image: "💼",
       organizer: "James Wilson",
       registrationDeadline: "2025-08-23",
-      tags: ["startup", "pitch", "entrepreneurship", "funding"]
+      tags: ["startup", "pitch", "entrepreneurship", "funding"],
     },
     {
       id: 6,
       title: "Climate Action Summit",
-      description: "Collaborative workshop on campus sustainability initiatives",
+      description:
+        "Collaborative workshop on campus sustainability initiatives",
       club: "Environmental Club",
       date: "2025-08-28",
       time: "1:00 PM - 6:00 PM",
@@ -242,12 +421,20 @@ const sampleData = {
       maxParticipants: 80,
       currentRegistrations: 45,
       difficulty: "All Levels",
-      prizes: ["Sustainability certificate", "Eco-friendly starter kit", "Green project funding"],
-      requirements: ["Environmental passion", "Notebook for brainstorming", "Open mind for collaboration"],
+      prizes: [
+        "Sustainability certificate",
+        "Eco-friendly starter kit",
+        "Green project funding",
+      ],
+      requirements: [
+        "Environmental passion",
+        "Notebook for brainstorming",
+        "Open mind for collaboration",
+      ],
       image: "🌍",
       organizer: "Luna Green",
       registrationDeadline: "2025-08-24",
-      tags: ["environment", "sustainability", "workshop", "climate"]
+      tags: ["environment", "sustainability", "workshop", "climate"],
     },
     {
       id: 7,
@@ -261,17 +448,26 @@ const sampleData = {
       maxParticipants: 32,
       currentRegistrations: 24,
       difficulty: "Intermediate",
-      prizes: ["Championship trophy", "Public speaking certification", "Leadership workshop access"],
-      requirements: ["Research preparation", "Formal attire", "Respect for opposing views"],
+      prizes: [
+        "Championship trophy",
+        "Public speaking certification",
+        "Leadership workshop access",
+      ],
+      requirements: [
+        "Research preparation",
+        "Formal attire",
+        "Respect for opposing views",
+      ],
       image: "🏆",
       organizer: "David Park",
       registrationDeadline: "2025-08-20",
-      tags: ["debate", "competition", "technology", "speaking"]
+      tags: ["debate", "competition", "technology", "speaking"],
     },
     {
       id: 8,
       title: "Esports Tournament: League of Legends",
-      description: "Competitive gaming tournament with live streaming and prizes",
+      description:
+        "Competitive gaming tournament with live streaming and prizes",
       club: "Gaming Club",
       date: "2025-08-24",
       time: "2:00 PM - 10:00 PM",
@@ -280,30 +476,65 @@ const sampleData = {
       maxParticipants: 40,
       currentRegistrations: 35,
       difficulty: "Competitive",
-      prizes: ["Gaming gear worth $2000", "Tournament trophy", "Streaming setup"],
-      requirements: ["League of Legends account", "Competitive rank required", "Team registration"],
+      prizes: [
+        "Gaming gear worth $2000",
+        "Tournament trophy",
+        "Streaming setup",
+      ],
+      requirements: [
+        "League of Legends account",
+        "Competitive rank required",
+        "Team registration",
+      ],
       image: "🎮",
       organizer: "Ryan Kim",
       registrationDeadline: "2025-08-22",
-      tags: ["esports", "gaming", "tournament", "streaming"]
-    }
+      tags: ["esports", "gaming", "tournament", "streaming"],
+    },
   ],
-  categories: ["Technology", "Arts", "Engineering", "Academic", "Social Impact", "Business", "Gaming"],
+  categories: [
+    "Technology",
+    "Arts",
+    "Engineering",
+    "Academic",
+    "Social Impact",
+    "Business",
+    "Gaming",
+  ],
   eventTypes: ["Competition", "Workshop", "Performance", "Social", "Academic"],
-  campusLocations: ["Main Auditorium", "Student Center", "Engineering Workshop", "Art Studio B", "Debate Hall", "Green Campus Center", "Innovation Hub", "Gaming Lounge"],
-  popularInterests: ["programming", "music", "photography", "debate", "robotics", "gaming", "business", "environment"]
+  campusLocations: [
+    "Main Auditorium",
+    "Student Center",
+    "Engineering Workshop",
+    "Art Studio B",
+    "Debate Hall",
+    "Green Campus Center",
+    "Innovation Hub",
+    "Gaming Lounge",
+  ],
+  popularInterests: [
+    "programming",
+    "music",
+    "photography",
+    "debate",
+    "robotics",
+    "gaming",
+    "business",
+    "environment",
+  ],
 };
 
 const ClubMate = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      type: 'bot',
-      content: "Hey there! 👋 I'm ClubMate, your AI-powered campus companion! ✨\n\n🎯 **I can help you with EVERYTHING:**\n\n📚 **DISCOVER:**\n• Explore 8+ amazing clubs across different categories\n• Find 8+ exciting upcoming events and competitions\n• Get personalized recommendations based on your interests\n\n🔧 **MANAGE through CHAT:**\n• **CREATE** new clubs: \"Create a club called AI Enthusiasts\"\n• **CREATE** new events: \"Create an event called Tech Meetup on 2025-08-25\"\n• **UPDATE** club details: \"Update Coding Club description to Focus on AI\"\n• **DELETE** clubs/events: \"Delete Gaming Club\"\n\n🚀 **Just talk to me naturally!**\n\n💡 **Examples:**\n• \"Show me tech clubs\"\n• \"Create a Photography Workshop event on Friday\"\n• \"Delete the old Music Club\"\n• \"Update Robotics Club meeting time to Mondays\"\n\nWhat would you like to do today? 🎉",
-      timestamp: new Date()
-    }
+      type: "bot",
+      content:
+        'Hey there! 👋 I\'m ClubMate, your AI-powered campus companion! ✨\n\n🎯 **I can help you with EVERYTHING:**\n\n📚 **DISCOVER:**\n• Explore 8+ amazing clubs across different categories\n• Find 8+ exciting upcoming events and competitions\n• Get personalized recommendations based on your interests\n\n🔧 **MANAGE through CHAT:**\n• **CREATE** new clubs: "Create a club called AI Enthusiasts"\n• **CREATE** new events: "Create an event called Tech Meetup on 2025-08-25"\n• **UPDATE** club details: "Update Coding Club description to Focus on AI"\n• **DELETE** clubs/events: "Delete Gaming Club"\n\n🚀 **Just talk to me naturally!**\n\n💡 **Examples:**\n• "Show me tech clubs"\n• "Create a Photography Workshop event on Friday"\n• "Delete the old Music Club"\n• "Update Robotics Club meeting time to Mondays"\n\nWhat would you like to do today? 🎉',
+      timestamp: new Date(),
+    },
   ]);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [favoriteClubs, setFavoriteClubs] = useState([]);
@@ -314,7 +545,7 @@ const ClubMate = () => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Only scroll when new messages are added, not on every render
@@ -329,123 +560,175 @@ const ClubMate = () => {
 
   // Initialize speech recognition
   useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognitionInstance = new SpeechRecognition();
-      
+
       recognitionInstance.continuous = false;
       recognitionInstance.interimResults = true;
-      recognitionInstance.lang = 'en-US';
+      recognitionInstance.lang = "en-US";
       recognitionInstance.maxAlternatives = 1;
-      
+
       recognitionInstance.onstart = () => {
-        console.log('Speech recognition started');
+        console.log("Speech recognition started");
         setIsRecording(true);
       };
-      
+
       recognitionInstance.onresult = (event) => {
-        console.log('Speech recognition result:', event);
-        let transcript = '';
+        console.log("Speech recognition result:", event);
+        let transcript = "";
         for (let i = event.resultIndex; i < event.results.length; i++) {
           if (event.results[i].isFinal) {
             transcript += event.results[i][0].transcript;
           }
         }
         if (transcript) {
-          console.log('Final transcript:', transcript);
-          setInputText(prev => prev + transcript);
+          console.log("Final transcript:", transcript);
+          setInputText((prev) => prev + transcript);
         }
       };
-      
+
       recognitionInstance.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
+        console.error("Speech recognition error:", event.error);
         setIsRecording(false);
-        if (event.error === 'not-allowed') {
-          alert('Microphone access denied. Please allow microphone access and try again.');
-        } else if (event.error === 'no-speech') {
-          alert('No speech detected. Please try again and speak clearly.');
+        if (event.error === "not-allowed") {
+          alert(
+            "Microphone access denied. Please allow microphone access and try again."
+          );
+        } else if (event.error === "no-speech") {
+          alert("No speech detected. Please try again and speak clearly.");
         } else {
           alert(`Speech recognition error: ${event.error}`);
         }
       };
-      
+
       recognitionInstance.onend = () => {
-        console.log('Speech recognition ended');
+        console.log("Speech recognition ended");
         setIsRecording(false);
       };
-      
+
       setRecognition(recognitionInstance);
     } else {
-      console.warn('Speech recognition not supported in this browser');
+      console.warn("Speech recognition not supported in this browser");
     }
   }, []);
 
   // Voice recording functions
   const startRecording = async () => {
     if (!recognition) {
-      alert('Speech recognition is not supported in your browser. Please try Chrome or Edge.');
+      alert(
+        "Speech recognition is not supported in your browser. Please try Chrome or Edge."
+      );
       return;
     }
 
     try {
       // Request microphone permission first
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      
-      console.log('Starting speech recognition');
+
+      console.log("Starting speech recognition");
       recognition.start();
     } catch (error) {
-      console.error('Error starting recognition:', error);
-      if (error.name === 'NotAllowedError') {
-        alert('Microphone access denied. Please allow microphone access in your browser settings and try again.');
-      } else if (error.name === 'NotFoundError') {
-        alert('No microphone found. Please connect a microphone and try again.');
+      console.error("Error starting recognition:", error);
+      if (error.name === "NotAllowedError") {
+        alert(
+          "Microphone access denied. Please allow microphone access in your browser settings and try again."
+        );
+      } else if (error.name === "NotFoundError") {
+        alert(
+          "No microphone found. Please connect a microphone and try again."
+        );
       } else {
-        alert('Failed to start voice recording. Please check your microphone and try again.');
+        alert(
+          "Failed to start voice recording. Please check your microphone and try again."
+        );
       }
     }
   };
 
   const stopRecording = () => {
     if (recognition && isRecording) {
-      console.log('Stopping speech recognition');
+      console.log("Stopping speech recognition");
       recognition.stop();
     }
   };
 
   const quickActions = [
     { text: "Show me all clubs", icon: Users, color: "bg-blue-500" },
-    { text: "What events are happening this week?", icon: Calendar, color: "bg-green-500" },
-    { text: "Create a club called AI Enthusiasts", icon: Plus, color: "bg-purple-500" },
-    { text: "Create an event called Tech Meetup on 2025-08-25", icon: Calendar, color: "bg-pink-500" },
+    {
+      text: "What events are happening this week?",
+      icon: Calendar,
+      color: "bg-green-500",
+    },
+    {
+      text: "Create a club called AI Enthusiasts",
+      icon: Plus,
+      color: "bg-purple-500",
+    },
+    {
+      text: "Create an event called Tech Meetup on 2025-08-25",
+      icon: Calendar,
+      color: "bg-pink-500",
+    },
     { text: "Delete Gaming Club", icon: Trash2, color: "bg-red-500" },
-    { text: "Update Coding Club description to Focus on AI and Machine Learning", icon: Edit, color: "bg-yellow-500" },
-    { text: "🎤 Test Voice Input", icon: Mic, color: "bg-indigo-500", action: "voice-test" }
+    {
+      text: "Update Coding Club description to Focus on AI and Machine Learning",
+      icon: Edit,
+      color: "bg-yellow-500",
+    },
+    {
+      text: "🎤 Test Voice Input",
+      icon: Mic,
+      color: "bg-indigo-500",
+      action: "voice-test",
+    },
   ];
 
   const toggleFavoriteClub = (clubId) => {
-    setFavoriteClubs(prev => 
-      prev.includes(clubId) 
-        ? prev.filter(id => id !== clubId)
+    setFavoriteClubs((prev) =>
+      prev.includes(clubId)
+        ? prev.filter((id) => id !== clubId)
         : [...prev, clubId]
     );
   };
 
   const toggleFavoriteEvent = (eventId) => {
-    setFavoriteEvents(prev => 
-      prev.includes(eventId) 
-        ? prev.filter(id => id !== eventId)
+    setFavoriteEvents((prev) =>
+      prev.includes(eventId)
+        ? prev.filter((id) => id !== eventId)
         : [...prev, eventId]
     );
   };
 
   const generateAdvancedPrompt = (userMessage) => {
-    const clubsInfo = sampleData.clubs.map(club => 
-      `${club.name} (${club.category}): ${club.description} | Leader: ${club.leader} | Members: ${club.members} | Rating: ${club.rating}⭐ | Meets: ${club.meetingTime} | Location: ${club.location} | Recent Achievements: ${club.achievements.join(', ')}`
-    ).join('\n');
+    const clubsInfo = sampleData.clubs
+      .map(
+        (club) =>
+          `${club.name} (${club.category}): ${club.description} | Leader: ${
+            club.leader
+          } | Members: ${club.members} | Rating: ${club.rating}⭐ | Meets: ${
+            club.meetingTime
+          } | Location: ${
+            club.location
+          } | Recent Achievements: ${club.achievements.join(", ")}`
+      )
+      .join("\n");
 
-    const eventsInfo = sampleData.events.map(event => 
-      `${event.title} by ${event.club} | Date: ${event.date} at ${event.time} | Location: ${event.location} | Category: ${event.category} | Description: ${event.description} | Registrations: ${event.currentRegistrations}/${event.maxParticipants} | Prizes: ${event.prizes.join(', ')} | Difficulty: ${event.difficulty}`
-    ).join('\n');
+    const eventsInfo = sampleData.events
+      .map(
+        (event) =>
+          `${event.title} by ${event.club} | Date: ${event.date} at ${
+            event.time
+          } | Location: ${event.location} | Category: ${
+            event.category
+          } | Description: ${event.description} | Registrations: ${
+            event.currentRegistrations
+          }/${event.maxParticipants} | Prizes: ${event.prizes.join(
+            ", "
+          )} | Difficulty: ${event.difficulty}`
+      )
+      .join("\n");
 
     return `You are ClubMate, an enthusiastic, intelligent, and extremely helpful AI campus assistant. You're like a knowledgeable friend who knows everything about campus life and activities.
 
@@ -457,9 +740,9 @@ ${clubsInfo}
 UPCOMING EVENTS (${sampleData.events.length} total):
 ${eventsInfo}
 
-CATEGORIES: ${sampleData.categories.join(', ')}
-EVENT TYPES: ${sampleData.eventTypes.join(', ')}
-POPULAR INTERESTS: ${sampleData.popularInterests.join(', ')}
+CATEGORIES: ${sampleData.categories.join(", ")}
+EVENT TYPES: ${sampleData.eventTypes.join(", ")}
+POPULAR INTERESTS: ${sampleData.popularInterests.join(", ")}
 
 USER'S MESSAGE: "${userMessage}"
 
@@ -483,20 +766,20 @@ Remember: You're not just providing information - you're helping students find t
 
     const userMessage = {
       id: Date.now(),
-      type: 'user',
+      type: "user",
       content: inputText.trim(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
+    setMessages((prev) => [...prev, userMessage]);
+    setInputText("");
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/ai/chat', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/api/ai/chat", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           message: generateAdvancedPrompt(inputText.trim()),
@@ -505,12 +788,12 @@ Remember: You're not just providing information - you're helping students find t
             events: sampleData.events,
             categories: sampleData.categories,
             eventTypes: sampleData.eventTypes,
-            conversationLength: messages.length
+            conversationLength: messages.length,
           },
-          conversationHistory: messages.slice(-5).map(msg => ({
+          conversationHistory: messages.slice(-5).map((msg) => ({
             type: msg.type,
-            content: msg.content
-          }))
+            content: msg.content,
+          })),
         }),
       });
 
@@ -518,30 +801,31 @@ Remember: You're not just providing information - you're helping students find t
         const data = await response.json();
         const botMessage = {
           id: Date.now() + 1,
-          type: 'bot',
+          type: "bot",
           content: data.response,
-          timestamp: new Date()
+          timestamp: new Date(),
         };
-        setMessages(prev => [...prev, botMessage]);
+        setMessages((prev) => [...prev, botMessage]);
       } else {
-        throw new Error('Failed to get response');
+        throw new Error("Failed to get response");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       const errorMessage = {
         id: Date.now() + 1,
-        type: 'bot',
-        content: "Sorry, I'm having trouble connecting right now. Please try again in a moment! 🔄",
-        timestamp: new Date()
+        type: "bot",
+        content:
+          "Sorry, I'm having trouble connecting right now. Please try again in a moment! 🔄",
+        timestamp: new Date(),
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -550,20 +834,30 @@ Remember: You're not just providing information - you're helping students find t
   const handleQuickAction = (actionText) => {
     // Handle voice test action
     if (actionText === "🎤 Test Voice Input") {
-      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      if (
+        "webkitSpeechRecognition" in window ||
+        "SpeechRecognition" in window
+      ) {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          navigator.mediaDevices.getUserMedia({ audio: true })
+          navigator.mediaDevices
+            .getUserMedia({ audio: true })
             .then(() => {
-              alert('✅ Microphone access granted! Voice input should work. Try clicking the microphone button.');
+              alert(
+                "✅ Microphone access granted! Voice input should work. Try clicking the microphone button."
+              );
             })
             .catch((error) => {
-              alert(`❌ Microphone access failed: ${error.message}. Please allow microphone access in your browser.`);
+              alert(
+                `❌ Microphone access failed: ${error.message}. Please allow microphone access in your browser.`
+              );
             });
         } else {
-          alert('❌ getUserMedia not supported in this browser.');
+          alert("❌ getUserMedia not supported in this browser.");
         }
       } else {
-        alert('❌ Speech recognition not supported. Please use Chrome, Edge, or Safari.');
+        alert(
+          "❌ Speech recognition not supported. Please use Chrome, Edge, or Safari."
+        );
       }
       return;
     }
@@ -574,20 +868,20 @@ Remember: You're not just providing information - you're helping students find t
       if (actionText.trim()) {
         const userMessage = {
           id: Date.now(),
-          type: 'user',
+          type: "user",
           content: actionText.trim(),
-          timestamp: new Date()
+          timestamp: new Date(),
         };
-        setMessages(prev => [...prev, userMessage]);
+        setMessages((prev) => [...prev, userMessage]);
         setIsLoading(true);
-        
+
         // Simulate AI response
         setTimeout(async () => {
           try {
-            const response = await fetch('http://localhost:5000/api/ai/chat', {
-              method: 'POST',
+            const response = await fetch("http://localhost:5000/api/ai/chat", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 message: generateAdvancedPrompt(actionText),
@@ -595,8 +889,8 @@ Remember: You're not just providing information - you're helping students find t
                   clubs: sampleData.clubs,
                   events: sampleData.events,
                   categories: sampleData.categories,
-                  eventTypes: sampleData.eventTypes
-                }
+                  eventTypes: sampleData.eventTypes,
+                },
               }),
             });
 
@@ -604,25 +898,28 @@ Remember: You're not just providing information - you're helping students find t
               const data = await response.json();
               const botMessage = {
                 id: Date.now() + 1,
-                type: 'bot',
+                type: "bot",
                 content: data.response,
-                timestamp: new Date()
+                timestamp: new Date(),
               };
-              setMessages(prev => [...prev, botMessage]);
+              setMessages((prev) => [...prev, botMessage]);
             }
           } catch (error) {
-            console.error('Error:', error);
+            console.error("Error:", error);
           } finally {
             setIsLoading(false);
           }
         }, 1000);
       }
     }, 100);
-    setInputText('');
+    setInputText("");
   };
 
   const formatTimestamp = (timestamp) => {
-    return timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return timestamp.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   return (
@@ -639,7 +936,7 @@ Remember: You're not just providing information - you're helping students find t
               <p className="text-xs text-gray-500">AI Campus Assistant</p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <div className="hidden sm:flex items-center space-x-2 bg-green-50 px-3 py-1 rounded-full">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -664,39 +961,55 @@ Remember: You're not just providing information - you're helping students find t
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${
+                  message.type === "user" ? "justify-end" : "justify-start"
+                }`}
               >
-                <div className={`flex max-w-2xl space-x-3 ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                <div
+                  className={`flex max-w-2xl space-x-3 ${
+                    message.type === "user"
+                      ? "flex-row-reverse space-x-reverse"
+                      : ""
+                  }`}
+                >
                   {/* Clean Avatar */}
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                    message.type === 'user' 
-                      ? 'bg-blue-500' 
-                      : 'bg-gray-600'
-                  }`}>
-                    {message.type === 'user' ? (
+                  <div
+                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                      message.type === "user" ? "bg-blue-500" : "bg-gray-600"
+                    }`}
+                  >
+                    {message.type === "user" ? (
                       <User className="w-4 h-4 text-white" />
                     ) : (
                       <Bot className="w-4 h-4 text-white" />
                     )}
                   </div>
-                  
+
                   {/* Clean Message Bubble */}
-                  <div className={`rounded-2xl px-4 py-3 max-w-lg ${
-                    message.type === 'user'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white border border-gray-200 text-gray-800'
-                  }`}>
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                    <p className={`text-xs mt-2 ${
-                      message.type === 'user' ? 'text-blue-100' : 'text-gray-500'
-                    }`}>
+                  <div
+                    className={`rounded-2xl px-4 py-3 max-w-lg ${
+                      message.type === "user"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white border border-gray-200 text-gray-800"
+                    }`}
+                  >
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                      {message.content}
+                    </p>
+                    <p
+                      className={`text-xs mt-2 ${
+                        message.type === "user"
+                          ? "text-blue-100"
+                          : "text-gray-500"
+                      }`}
+                    >
                       {formatTimestamp(message.timestamp)}
                     </p>
                   </div>
                 </div>
               </div>
             ))}
-            
+
             {/* Loading Indicator */}
             {isLoading && (
               <div className="flex justify-start">
@@ -708,8 +1021,14 @@ Remember: You're not just providing information - you're helping students find t
                     <div className="flex items-center space-x-2">
                       <div className="flex space-x-1">
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}
+                        ></div>
+                        <div
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
                       </div>
                       <span className="text-sm text-gray-600">Thinking...</span>
                     </div>
@@ -717,7 +1036,7 @@ Remember: You're not just providing information - you're helping students find t
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
 
@@ -728,7 +1047,9 @@ Remember: You're not just providing information - you're helping students find t
               <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-red-700 text-sm font-medium">🎤 Listening... Speak now!</span>
+                  <span className="text-red-700 text-sm font-medium">
+                    🎤 Listening... Speak now!
+                  </span>
                 </div>
                 <button
                   onClick={stopRecording}
@@ -740,12 +1061,18 @@ Remember: You're not just providing information - you're helping students find t
             )}
 
             {/* Browser compatibility notice */}
-            {!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) && (
+            {!(
+              "webkitSpeechRecognition" in window ||
+              "SpeechRecognition" in window
+            ) && (
               <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-yellow-700 text-sm">⚠️ Voice input not supported in this browser. Use Chrome, Edge, or Safari.</p>
+                <p className="text-yellow-700 text-sm">
+                  ⚠️ Voice input not supported in this browser. Use Chrome,
+                  Edge, or Safari.
+                </p>
               </div>
             )}
-            
+
             <div className="flex space-x-3">
               <div className="flex-1 relative">
                 <textarea
@@ -760,20 +1087,31 @@ Remember: You're not just providing information - you're helping students find t
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
                   <button
                     onClick={isRecording ? stopRecording : startRecording}
-                    disabled={!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)}
+                    disabled={
+                      !(
+                        "webkitSpeechRecognition" in window ||
+                        "SpeechRecognition" in window
+                      )
+                    }
                     className={`p-2 rounded-lg transition-colors ${
-                      !('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : isRecording 
-                          ? 'text-red-500 hover:bg-red-50' 
-                          : 'text-gray-400 hover:text-blue-500 hover:bg-blue-50'
+                      !(
+                        "webkitSpeechRecognition" in window ||
+                        "SpeechRecognition" in window
+                      )
+                        ? "text-gray-300 cursor-not-allowed"
+                        : isRecording
+                        ? "text-red-500 hover:bg-red-50"
+                        : "text-gray-400 hover:text-blue-500 hover:bg-blue-50"
                     }`}
                     title={
-                      !('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)
-                        ? 'Voice input not supported'
-                        : isRecording 
-                          ? 'Stop recording' 
-                          : 'Start voice input'
+                      !(
+                        "webkitSpeechRecognition" in window ||
+                        "SpeechRecognition" in window
+                      )
+                        ? "Voice input not supported"
+                        : isRecording
+                        ? "Stop recording"
+                        : "Start voice input"
                     }
                   >
                     {isRecording ? (
@@ -782,7 +1120,7 @@ Remember: You're not just providing information - you're helping students find t
                       <Mic className="w-4 h-4" />
                     )}
                   </button>
-                  <button 
+                  <button
                     className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
                     onClick={() => setShowQuickActions(!showQuickActions)}
                     title="Quick suggestions"
@@ -811,7 +1149,9 @@ Remember: You're not just providing information - you're helping students find t
               {showQuickActions && (
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Quick Actions
+                    </h3>
                     <button
                       onClick={() => setShowQuickActions(false)}
                       className="p-1 text-gray-400 hover:text-gray-600"
@@ -836,20 +1176,31 @@ Remember: You're not just providing information - you're helping students find t
 
               {/* Stats */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Campus Stats</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Campus Stats
+                </h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Active Clubs</span>
-                    <span className="text-sm font-semibold text-gray-900">{sampleData.clubs.length}</span>
+                    <span className="text-sm font-semibold text-gray-900">
+                      {sampleData.clubs.length}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Upcoming Events</span>
-                    <span className="text-sm font-semibold text-gray-900">{sampleData.events.length}</span>
+                    <span className="text-sm text-gray-600">
+                      Upcoming Events
+                    </span>
+                    <span className="text-sm font-semibold text-gray-900">
+                      {sampleData.events.length}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Total Members</span>
                     <span className="text-sm font-semibold text-gray-900">
-                      {sampleData.clubs.reduce((sum, club) => sum + club.members, 0)}
+                      {sampleData.clubs.reduce(
+                        (sum, club) => sum + club.members,
+                        0
+                      )}
                     </span>
                   </div>
                 </div>
@@ -857,20 +1208,32 @@ Remember: You're not just providing information - you're helping students find t
 
               {/* Top Clubs */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Popular Clubs</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Popular Clubs
+                </h3>
                 <div className="space-y-3">
                   {sampleData.clubs.slice(0, 3).map((club) => (
                     <div key={club.id} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-gray-900">{club.name}</h4>
-                          <p className="text-xs text-gray-500">{club.members} members • {club.rating}⭐</p>
+                          <h4 className="font-medium text-gray-900">
+                            {club.name}
+                          </h4>
+                          <p className="text-xs text-gray-500">
+                            {club.members} members • {club.rating}⭐
+                          </p>
                         </div>
                         <button
                           onClick={() => toggleFavoriteClub(club.id)}
                           className="p-1 text-gray-400 hover:text-red-500 transition-colors"
                         >
-                          <Heart className={`w-4 h-4 ${favoriteClubs.includes(club.id) ? 'text-red-500 fill-current' : ''}`} />
+                          <Heart
+                            className={`w-4 h-4 ${
+                              favoriteClubs.includes(club.id)
+                                ? "text-red-500 fill-current"
+                                : ""
+                            }`}
+                          />
                         </button>
                       </div>
                     </div>
@@ -880,20 +1243,32 @@ Remember: You're not just providing information - you're helping students find t
 
               {/* Recent Events */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Events</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Upcoming Events
+                </h3>
                 <div className="space-y-3">
                   {sampleData.events.slice(0, 3).map((event) => (
                     <div key={event.id} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-gray-900">{event.title}</h4>
-                          <p className="text-xs text-gray-500">{event.date} • {event.time}</p>
+                          <h4 className="font-medium text-gray-900">
+                            {event.title}
+                          </h4>
+                          <p className="text-xs text-gray-500">
+                            {event.date} • {event.time}
+                          </p>
                         </div>
                         <button
                           onClick={() => toggleFavoriteEvent(event.id)}
                           className="p-1 text-gray-400 hover:text-red-500 transition-colors"
                         >
-                          <Heart className={`w-4 h-4 ${favoriteEvents.includes(event.id) ? 'text-red-500 fill-current' : ''}`} />
+                          <Heart
+                            className={`w-4 h-4 ${
+                              favoriteEvents.includes(event.id)
+                                ? "text-red-500 fill-current"
+                                : ""
+                            }`}
+                          />
                         </button>
                       </div>
                     </div>

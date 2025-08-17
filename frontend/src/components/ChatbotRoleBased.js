@@ -9,36 +9,28 @@ import {
   User,
   Zap,
   GraduationCap,
+  UserCheck,
+  Plus,
+  Eye,
+  Settings,
+  UserPlus,
   Crown,
+  BookOpen,
 } from "lucide-react";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import api from "../services/api";
 
-const Chatbot = () => {
+const ChatbotModern = () => {
   const [userRole, setUserRole] = useState(null); // null, 'student', 'organizer'
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      type: "bot",
-      content:
-        "Welcome to ClubSphere! ✨ I'm your AI assistant powered by Gemini. Are you a Student looking to join clubs and events, or an Organizer managing activities?",
-      suggestions: [
-        "I'm a Student 🎓",
-        "I'm an Organizer 👑",
-        "Show all clubs",
-        "Tell me about ClubSphere",
-        "What can you do?",
-      ],
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [clubs, setClubs] = useState([]);
   const [events, setEvents] = useState([]);
   const [showCreateClub, setShowCreateClub] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [showEventDetails, setShowEventDetails] = useState(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -53,46 +45,46 @@ const Chatbot = () => {
     loadEvents();
   }, []);
 
-  // Initialize chat when role is selected
+  // Initialize chat based on role
   useEffect(() => {
     if (userRole) {
-      initializeRoleBasedChat();
+      initializeChat();
     }
   }, [userRole]);
 
-  const initializeRoleBasedChat = () => {
-    const welcomeMessages = {
+  const initializeChat = () => {
+    const roleMessages = {
       student: {
-        content:
-          "Welcome, Student! 🎓 I'm here to help you discover amazing clubs and events. You can explore clubs, view events, and register for activities that interest you!",
+        welcome: `Welcome, Student! 🎓 I'm here to help you discover amazing clubs and events at your institution. You can explore clubs, view events, and register for activities that interest you!`,
         suggestions: [
           "Show all clubs",
-          "View upcoming events",
+          "View upcoming events", 
           "Find clubs by interest",
-          "What's happening this week?",
-        ],
+          "Show my registrations",
+          "What's happening this week?"
+        ]
       },
       organizer: {
-        content:
-          "Welcome, Event Organizer! 👑 I'm your assistant for managing clubs and creating amazing events. You have full access to create, edit, and manage all club activities!",
+        welcome: `Welcome, Event Organizer! 👑 I'm your assistant for managing clubs and creating amazing events. You have full access to create, edit, and manage all club activities!`,
         suggestions: [
           "Create a new club",
           "Create an event",
           "Manage my clubs",
           "View all events",
-        ],
-      },
+          "Club analytics"
+        ]
+      }
     };
 
-    const roleData = welcomeMessages[userRole];
+    const roleData = roleMessages[userRole];
     setMessages([
       {
         id: 1,
         type: "bot",
-        content: roleData.content,
+        content: roleData.welcome,
         suggestions: roleData.suggestions,
         timestamp: new Date(),
-      },
+      }
     ]);
   };
 
@@ -117,19 +109,21 @@ const Chatbot = () => {
   const sendToAI = async (message) => {
     try {
       const context = `
-Current clubs: ${clubs.length} clubs (${clubs.map((c) => c.name).join(", ")})
+User Role: ${userRole}
+Current clubs: ${clubs.length} clubs (${clubs.map(c => c.name).join(', ')})
 Upcoming events: ${events.length} events
+User capabilities: ${userRole === 'organizer' ? 'Can create/manage clubs and events' : 'Can view and register for events'}
       `;
-
+      
       const response = await api.post("/api/ai/chat", {
         message,
         context,
       });
-
+      
       return response.data.response;
     } catch (error) {
       console.error("AI Error:", error);
-      return "I'm having trouble connecting to my AI brain right now, but I can still help you with basic club and event management! 🤖";
+      return `I'm having trouble connecting to my AI brain right now, but I can still help you with ${userRole === 'organizer' ? 'club and event management' : 'finding clubs and events'}! 🤖`;
     }
   };
 
@@ -154,29 +148,46 @@ Upcoming events: ${events.length} events
 
     if (lowerInput.includes("show") && lowerInput.includes("club")) {
       botResponse = await handleShowClubs();
-      suggestions = ["Create a new club", "Show events", "Join a club"];
+      suggestions = userRole === 'organizer' 
+        ? ["Create a new club", "Manage clubs", "Create event"]
+        : ["View club details", "Find similar clubs", "Show events"];
     } else if (lowerInput.includes("create") && lowerInput.includes("club")) {
-      setShowCreateClub(true);
-      botResponse =
-        "I'll help you create a new club! Please fill out the form below.";
-      suggestions = ["Cancel", "Show existing clubs"];
+      if (userRole === 'organizer') {
+        setShowCreateClub(true);
+        botResponse = "I'll help you create a new club! Please fill out the form below.";
+        suggestions = ["Cancel", "Show existing clubs"];
+      } else {
+        botResponse = "I'm sorry, but only organizers can create clubs. However, I can help you find existing clubs to join!";
+        suggestions = ["Show all clubs", "Find clubs by interest", "Contact organizers"];
+      }
     } else if (lowerInput.includes("show") && lowerInput.includes("event")) {
       botResponse = await handleShowEvents();
-      suggestions = ["Create an event", "Show clubs", "What's next week?"];
+      suggestions = userRole === 'organizer'
+        ? ["Create an event", "Manage events", "Event analytics"]
+        : ["Register for event", "View event details", "Find more events"];
     } else if (lowerInput.includes("create") && lowerInput.includes("event")) {
-      setShowCreateEvent(true);
-      botResponse =
-        "Let's create an amazing event! Please fill out the details below.";
-      suggestions = ["Cancel", "Show existing events"];
+      if (userRole === 'organizer') {
+        setShowCreateEvent(true);
+        botResponse = "Let's create an amazing event! Please fill out the details below.";
+        suggestions = ["Cancel", "Show existing events"];
+      } else {
+        botResponse = "Only organizers can create events, but I can help you discover exciting events to attend!";
+        suggestions = ["Show upcoming events", "Find events by category", "Contact organizers"];
+      }
+    } else if (lowerInput.includes("register") || lowerInput.includes("join")) {
+      if (userRole === 'student') {
+        botResponse = await handleRegistration(lowerInput);
+        suggestions = ["View my registrations", "Find more events", "Show club details"];
+      } else {
+        botResponse = "As an organizer, you can manage registrations for your events. Would you like to see registration data?";
+        suggestions = ["View registrations", "Manage events", "Create new event"];
+      }
     } else {
       // Send to AI for general questions
       botResponse = await sendToAI(input);
-      suggestions = [
-        "Show my clubs",
-        "Create something new",
-        "What can you do?",
-        "Tell me more",
-      ];
+      suggestions = userRole === 'organizer'
+        ? ["Create something new", "Manage my content", "View analytics", "Help"]
+        : ["Explore clubs", "Find events", "Get recommendations", "Help"];
     }
 
     setTimeout(() => {
@@ -195,36 +206,47 @@ Upcoming events: ${events.length} events
   const handleShowClubs = async () => {
     await loadClubs();
     if (clubs.length === 0) {
-      return "No clubs found yet! Why don't you create the first one? 🚀";
+      return userRole === 'organizer' 
+        ? "No clubs found yet! Why don't you create the first one? 🚀"
+        : "No clubs available yet. Check back soon for new clubs to join! 🏛️";
     }
-    return `Here are all ${clubs.length} clubs:\n\n${clubs
-      .map(
-        (club) =>
-          `🏛️ **${club.name}**\n${club.description || "No description"}\n👥 ${
-            club.member_count || 0
-          } members\n`
-      )
-      .join("\n")}`;
+    
+    const clubsList = clubs.map((club) => 
+      `🏛️ **${club.name}**\n${club.description || "No description"}\n👥 ${club.member_count || 0} members\n`
+    ).join("\n");
+
+    return userRole === 'organizer'
+      ? `Here are all ${clubs.length} clubs you can manage:\n\n${clubsList}`
+      : `Discover ${clubs.length} amazing clubs you can join:\n\n${clubsList}`;
   };
 
   const handleShowEvents = async () => {
     await loadEvents();
     if (events.length === 0) {
-      return "No events scheduled yet! Ready to create the first one? 🎉";
+      return userRole === 'organizer'
+        ? "No events scheduled yet! Ready to create the first one? 🎉"
+        : "No events available yet. Stay tuned for exciting events! 📅";
     }
-    return `Upcoming events (${events.length}):\n\n${events
-      .map(
-        (event) =>
-          `📅 **${event.title}**\n🏛️ ${event.club_name}\n📍 ${
-            event.location || "Location TBD"
-          }\n⏰ ${format(new Date(event.date), "PPP")}\n`
-      )
-      .join("\n")}`;
+
+    const eventsList = events.map((event) =>
+      `📅 **${event.title}**\n🏛️ ${event.club_name}\n📍 ${event.location || "Location TBD"}\n⏰ ${format(new Date(event.date), "PPP")}\n`
+    ).join("\n");
+
+    return userRole === 'organizer'
+      ? `Events you can manage (${events.length}):\n\n${eventsList}`
+      : `Upcoming events you can attend (${events.length}):\n\n${eventsList}`;
+  };
+
+  const handleRegistration = async (input) => {
+    // Simulate registration logic
+    return "I've noted your interest! In a full system, this would register you for the event and send confirmation details. 🎊";
   };
 
   const handleSuggestionClick = async (suggestion) => {
     setInput(suggestion);
-    await handleSend();
+    // Simulate typing the suggestion
+    const event = { preventDefault: () => {}, key: "Enter" };
+    setTimeout(() => handleSend(), 100);
   };
 
   const handleCreateClub = async (clubData) => {
@@ -232,12 +254,12 @@ Upcoming events: ${events.length} events
       await api.post("/api/clubs", clubData);
       setShowCreateClub(false);
       await loadClubs();
-
+      
       const successMessage = {
         id: Date.now(),
         type: "bot",
         content: `🎉 Awesome! "${clubData.name}" has been created successfully! Ready to invite members or create events?`,
-        suggestions: ["Create an event", "Show all clubs", "Invite members"],
+        suggestions: ["Create an event", "Invite members", "Manage club settings"],
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, successMessage]);
@@ -252,12 +274,12 @@ Upcoming events: ${events.length} events
       await api.post("/api/events", eventData);
       setShowCreateEvent(false);
       await loadEvents();
-
+      
       const successMessage = {
         id: Date.now(),
         type: "bot",
-        content: `🎊 Perfect! "${eventData.title}" has been scheduled! I can help you with more events or other tasks.`,
-        suggestions: ["Show all events", "Create another event", "Show clubs"],
+        content: `🎊 Perfect! "${eventData.title}" has been scheduled! Members can now register for this event.`,
+        suggestions: ["View registrations", "Create another event", "Promote event"],
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, successMessage]);
@@ -267,6 +289,189 @@ Upcoming events: ${events.length} events
     }
   };
 
+  // Role Selection Component
+  const RoleSelection = () => (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            rotate: [0, 180, 360],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full opacity-20 blur-xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1.1, 1, 1.1],
+            rotate: [360, 180, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="absolute bottom-10 right-10 w-40 h-40 bg-gradient-to-r from-blue-300 to-indigo-300 rounded-full opacity-20 blur-xl"
+        />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 max-w-4xl w-full"
+      >
+        {/* Header */}
+        <div className="text-center mb-12">
+          <motion.div
+            animate={{
+              rotate: [0, 360],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="inline-flex p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl mb-6"
+          >
+            <Sparkles className="h-12 w-12 text-white" />
+          </motion.div>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+            Welcome to ClubSphere
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Choose your role to get started with personalized features and capabilities tailored just for you!
+          </p>
+        </div>
+
+        {/* Role Cards */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Student Card */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -10 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setUserRole('student')}
+            className="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-white/20 cursor-pointer hover:shadow-2xl transition-all duration-300"
+          >
+            <div className="text-center">
+              <motion.div
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex p-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl mb-6"
+              >
+                <GraduationCap className="h-12 w-12 text-white" />
+              </motion.div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Student</h2>
+              <p className="text-gray-600 mb-6">
+                Discover clubs, attend events, and connect with your community
+              </p>
+              
+              <div className="space-y-3 text-left">
+                <div className="flex items-center space-x-3">
+                  <Eye className="h-5 w-5 text-blue-500" />
+                  <span className="text-sm text-gray-700">Browse and explore clubs</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Calendar className="h-5 w-5 text-blue-500" />
+                  <span className="text-sm text-gray-700">View and register for events</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <UserPlus className="h-5 w-5 text-blue-500" />
+                  <span className="text-sm text-gray-700">Join clubs and communities</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <BookOpen className="h-5 w-5 text-blue-500" />
+                  <span className="text-sm text-gray-700">Access learning resources</span>
+                </div>
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-6 w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all"
+              >
+                Continue as Student
+              </motion.button>
+            </div>
+          </motion.div>
+
+          {/* Organizer Card */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -10 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setUserRole('organizer')}
+            className="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-white/20 cursor-pointer hover:shadow-2xl transition-all duration-300"
+          >
+            <div className="text-center">
+              <motion.div
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl mb-6"
+              >
+                <Crown className="h-12 w-12 text-white" />
+              </motion.div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Organizer</h2>
+              <p className="text-gray-600 mb-6">
+                Create and manage clubs, organize events, and build communities
+              </p>
+              
+              <div className="space-y-3 text-left">
+                <div className="flex items-center space-x-3">
+                  <Plus className="h-5 w-5 text-purple-500" />
+                  <span className="text-sm text-gray-700">Create and manage clubs</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Calendar className="h-5 w-5 text-purple-500" />
+                  <span className="text-sm text-gray-700">Organize events and activities</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Users className="h-5 w-5 text-purple-500" />
+                  <span className="text-sm text-gray-700">Manage member registrations</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Settings className="h-5 w-5 text-purple-500" />
+                  <span className="text-sm text-gray-700">Access admin tools and analytics</span>
+                </div>
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-6 w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all"
+              >
+                Continue as Organizer
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="text-center mt-12"
+        >
+          <p className="text-gray-500 text-sm">
+            You can always switch roles later in your profile settings
+          </p>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+
+  // Show role selection if no role is chosen
+  if (!userRole) {
+    return <RoleSelection />;
+  }
+
+  // Main Chat Interface (same as before but with role-based modifications)
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       {/* Animated Background Elements */}
@@ -317,33 +522,57 @@ Upcoming events: ${events.length} events
           transition={{ duration: 0.5 }}
           className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 p-6 mb-4"
         >
-          <div className="flex items-center justify-center space-x-3">
-            <motion.div
-              animate={{
-                rotate: [0, 360],
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl"
-            >
-              <Sparkles className="h-8 w-8 text-white" />
-            </motion.div>
-            <div className="text-center">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                ClubSphere AI
-              </h1>
-              <p className="text-gray-600 text-sm">Powered by Gemini AI ✨</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <motion.div
+                animate={{
+                  rotate: [0, 360],
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className={`p-3 rounded-xl ${
+                  userRole === 'student' 
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                    : 'bg-gradient-to-r from-purple-500 to-pink-500'
+                }`}
+              >
+                {userRole === 'student' ? (
+                  <GraduationCap className="h-8 w-8 text-white" />
+                ) : (
+                  <Crown className="h-8 w-8 text-white" />
+                )}
+              </motion.div>
+              <div>
+                <h1 className={`text-3xl font-bold bg-gradient-to-r ${
+                  userRole === 'student' 
+                    ? 'from-blue-600 to-cyan-600'
+                    : 'from-purple-600 to-pink-600'
+                } bg-clip-text text-transparent`}>
+                  ClubSphere AI
+                </h1>
+                <p className="text-gray-600 text-sm">
+                  {userRole === 'student' ? '🎓 Student Mode' : '👑 Organizer Mode'} • Powered by Gemini AI
+                </p>
+              </div>
             </div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setUserRole(null)}
+              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-600 transition-colors"
+            >
+              Switch Role
+            </motion.button>
           </div>
         </motion.div>
 
         {/* Chat Messages */}
         <div className="flex-1 bg-white/60 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 p-6 overflow-hidden flex flex-col">
-          <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+          <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
             <AnimatePresence>
               {messages.map((message) => (
                 <motion.div
@@ -359,21 +588,23 @@ Upcoming events: ${events.length} events
                   <div
                     className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
                       message.type === "user"
-                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                        ? userRole === 'student'
+                          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white"
+                          : "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
                         : "bg-white shadow-md border border-gray-100"
                     }`}
                   >
                     <div className="flex items-center space-x-2 mb-2">
                       {message.type === "user" ? (
-                        <User className="h-4 w-4" />
+                        userRole === 'student' ? (
+                          <GraduationCap className="h-4 w-4" />
+                        ) : (
+                          <Crown className="h-4 w-4" />
+                        )
                       ) : (
                         <motion.div
                           animate={{ rotate: [0, 360] }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "linear",
-                          }}
+                          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                         >
                           <Bot className="h-4 w-4 text-purple-500" />
                         </motion.div>
@@ -393,7 +624,11 @@ Upcoming events: ${events.length} events
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => handleSuggestionClick(suggestion)}
-                            className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs hover:bg-purple-200 transition-colors"
+                            className={`px-3 py-1 rounded-full text-xs hover:shadow-md transition-all ${
+                              userRole === 'student'
+                                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                                : "bg-purple-100 text-purple-700 hover:bg-purple-200"
+                            }`}
                           >
                             {suggestion}
                           </motion.button>
@@ -415,11 +650,7 @@ Upcoming events: ${events.length} events
                   <div className="flex items-center space-x-2">
                     <motion.div
                       animate={{ rotate: [0, 360] }}
-                      transition={{
-                        duration: 1,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     >
                       <Bot className="h-4 w-4 text-purple-500" />
                     </motion.div>
@@ -460,7 +691,7 @@ Upcoming events: ${events.length} events
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Ask me anything about clubs and events..."
+                placeholder={`Ask me about ${userRole === 'student' ? 'clubs and events to join' : 'creating and managing activities'}...`}
                 className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
               />
               <motion.div
@@ -476,17 +707,21 @@ Upcoming events: ${events.length} events
               whileTap={{ scale: 0.95 }}
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
-              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
+              className={`px-6 py-3 text-white rounded-2xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all ${
+                userRole === 'student'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600'
+                  : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+              }`}
             >
               <Send className="h-5 w-5" />
             </motion.button>
-          </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Create Club Modal */}
+      {/* Create Club Modal (Only for Organizers) */}
       <AnimatePresence>
-        {showCreateClub && (
+        {showCreateClub && userRole === 'organizer' && (
           <CreateClubModal
             onClose={() => setShowCreateClub(false)}
             onSubmit={handleCreateClub}
@@ -494,9 +729,9 @@ Upcoming events: ${events.length} events
         )}
       </AnimatePresence>
 
-      {/* Create Event Modal */}
+      {/* Create Event Modal (Only for Organizers) */}
       <AnimatePresence>
-        {showCreateEvent && (
+        {showCreateEvent && userRole === 'organizer' && (
           <CreateEventModal
             clubs={clubs}
             onClose={() => setShowCreateEvent(false)}
@@ -508,7 +743,7 @@ Upcoming events: ${events.length} events
   );
 };
 
-// Create Club Modal Component
+// Create Club Modal Component (for Organizers)
 const CreateClubModal = ({ onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -601,7 +836,7 @@ const CreateClubModal = ({ onClose, onSubmit }) => {
   );
 };
 
-// Create Event Modal Component
+// Create Event Modal Component (for Organizers)
 const CreateEventModal = ({ clubs, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -748,4 +983,4 @@ const CreateEventModal = ({ clubs, onClose, onSubmit }) => {
   );
 };
 
-export default Chatbot;
+export default ChatbotModern;

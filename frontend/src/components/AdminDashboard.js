@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import { Settings, Users, Calendar, MessageCircle, Home } from 'lucide-react';
-import ClubMate from './ClubMate';
-import ClubManager from './ClubManager';
-import EventManager from './EventManager';
+import React, { useState } from "react";
+import { Settings, Users, Calendar, MessageCircle, Home } from "lucide-react";
+import ClubMate from "./ClubMate";
+import ClubManager from "./ClubManager";
+import EventManager from "./EventManager";
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('chat');
+  const [activeTab, setActiveTab] = useState("chat");
 
   const tabs = [
-    { id: 'chat', label: 'ClubMate Chat', icon: MessageCircle, color: 'blue' },
-    { id: 'clubs', label: 'Manage Clubs', icon: Users, color: 'green' },
-    { id: 'events', label: 'Manage Events', icon: Calendar, color: 'purple' },
+    { id: "chat", label: "ClubMate Chat", icon: MessageCircle, color: "blue" },
+    { id: "clubs", label: "Manage Clubs", icon: Users, color: "green" },
+    { id: "events", label: "Manage Events", icon: Calendar, color: "purple" },
   ];
 
   const renderContent = () => {
-    switch(activeTab) {
-      case 'chat':
+    switch (activeTab) {
+      case "chat":
         return <ClubMate />;
-      case 'clubs':
+      case "clubs":
         return <ClubManager />;
-      case 'events':
+      case "events":
         return <EventManager />;
       default:
         return <ClubMate />;
@@ -39,20 +39,22 @@ const AdminDashboard = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-800">ClubSphere</h1>
-                <p className="text-xs text-gray-600">Campus Management System</p>
+                <p className="text-xs text-gray-600">
+                  Campus Management System
+                </p>
               </div>
             </div>
 
             {/* Tab Navigation */}
             <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
-              {tabs.map(tab => (
+              {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                     activeTab === tab.id
                       ? `bg-${tab.color}-500 text-white shadow-md`
-                      : 'text-gray-600 hover:text-gray-800 hover:bg-white'
+                      : "text-gray-600 hover:text-gray-800 hover:bg-white"
                   }`}
                 >
                   <tab.icon className="h-4 w-4" />
@@ -80,19 +82,19 @@ const AdminDashboard = () => {
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <span>Current Page:</span>
             <span className="font-medium text-gray-800">
-              {tabs.find(tab => tab.id === activeTab)?.label}
+              {tabs.find((tab) => tab.id === activeTab)?.label}
             </span>
-            {activeTab === 'chat' && (
+            {activeTab === "chat" && (
               <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs ml-2">
                 AI Powered
               </span>
             )}
-            {activeTab === 'clubs' && (
+            {activeTab === "clubs" && (
               <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs ml-2">
                 CRUD Operations
               </span>
             )}
-            {activeTab === 'events' && (
+            {activeTab === "events" && (
               <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs ml-2">
                 Full Management
               </span>
@@ -102,9 +104,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Content Area */}
-      <main className="transition-all duration-300">
-        {renderContent()}
-      </main>
+      <main className="transition-all duration-300">{renderContent()}</main>
 
       {/* Footer */}
       <footer className="bg-white border-t mt-8">
@@ -115,9 +115,15 @@ const AdminDashboard = () => {
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-600">
               <span>Features:</span>
-              <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded">AI Chat</span>
-              <span className="bg-green-100 text-green-700 px-2 py-1 rounded">Club CRUD</span>
-              <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded">Event CRUD</span>
+              <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                AI Chat
+              </span>
+              <span className="bg-green-100 text-green-700 px-2 py-1 rounded">
+                Club CRUD
+              </span>
+              <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded">
+                Event CRUD
+              </span>
             </div>
           </div>
         </div>

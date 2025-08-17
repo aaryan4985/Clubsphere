@@ -15,6 +15,7 @@ ClubMate is a simple, intelligent chatbot designed to help students discover clu
 ## 🏗️ Tech Stack
 
 ### Frontend
+
 - **React 18** - Modern React with hooks
 - **Tailwind CSS** - Utility-first styling
 - **Lucide React** - Beautiful icons
@@ -22,6 +23,7 @@ ClubMate is a simple, intelligent chatbot designed to help students discover clu
 - **React Hot Toast** - Notifications
 
 ### Backend
+
 - **Node.js & Express** - Server framework
 - **Google Gemini AI** - Natural language processing
 - **CORS** - Cross-origin resource sharing
@@ -31,6 +33,7 @@ ClubMate is a simple, intelligent chatbot designed to help students discover clu
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js (v14 or higher)
 - npm or yarn
 - Google Gemini API key
@@ -38,18 +41,21 @@ ClubMate is a simple, intelligent chatbot designed to help students discover clu
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <your-repo-url>
    cd codesphere
    ```
 
 2. **Set up the backend**
+
    ```bash
    cd backend
    npm install
    ```
 
 3. **Configure environment variables**
+
    - Copy `.env.example` to `.env`
    - Add your Google Gemini API key:
      ```
@@ -67,10 +73,12 @@ ClubMate is a simple, intelligent chatbot designed to help students discover clu
 ### Running the Application
 
 1. **Start the backend server**
+
    ```bash
    cd backend
    npm start
    ```
+
    Server will run on `http://localhost:5000`
 
 2. **Start the frontend development server**
@@ -94,6 +102,7 @@ Try asking ClubMate:
 ## 📊 Pre-loaded Data
 
 ### Clubs
+
 - **Coding Club** - Programming, hackathons, tech projects
 - **Music Club** - Instruments, vocals, performances
 - **Robotics Club** - Engineering, programming, competitions
@@ -101,6 +110,7 @@ Try asking ClubMate:
 - **Debate Society** - Public speaking, critical thinking
 
 ### Events
+
 - **Hackathon 2025** - 24-hour coding competition
 - **Open Mic Night** - Musical talent showcase
 - **Robot Battle Championship** - Competitive robotics
@@ -119,11 +129,13 @@ Try asking ClubMate:
 ## 🔧 API Endpoints
 
 ### Chat Endpoint
+
 - **POST** `/api/ai/chat`
 - **Body**: `{ message: "user question", context: { clubs, events } }`
 - **Response**: `{ response: "AI generated response" }`
 
 ### Health Check
+
 - **GET** `/api/health`
 - **Response**: Server status and timestamp
 

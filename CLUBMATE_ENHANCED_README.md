@@ -5,6 +5,7 @@
 ## ✨ Enhanced Features
 
 ### 🎯 **Advanced AI Capabilities**
+
 - **Google Gemini AI Integration** - Natural language processing for intelligent responses
 - **Context-Aware Conversations** - Remembers conversation context for better responses
 - **Personalized Recommendations** - AI suggests clubs/events based on user interests
@@ -12,6 +13,7 @@
 - **Fallback Intelligence** - Works even when AI API is unavailable
 
 ### 🏫 **Rich Campus Data**
+
 - **8 Diverse Clubs** across Technology, Arts, Engineering, Business, Gaming, and more
 - **8 Exciting Events** with competitions, workshops, performances, and summits
 - **Detailed Club Profiles** - Leaders, ratings, member counts, meeting schedules
@@ -19,6 +21,7 @@
 - **Real-time Statistics** - Live member counts, registration numbers, achievements
 
 ### 🎨 **Modern UI/UX**
+
 - **Glass Morphism Design** - Translucent, modern aesthetic with backdrop blur
 - **Advanced Animations** - Smooth transitions, hover effects, and micro-interactions
 - **Gradient Backgrounds** - Dynamic, animated gradient overlays
@@ -26,6 +29,7 @@
 - **Interactive Elements** - Hover animations, ripple effects, glow animations
 
 ### 💫 **Interactive Features**
+
 - **Quick Action Buttons** - Instant access to popular queries
 - **Favorite System** - Heart/save clubs and events you love
 - **Real-time Chat** - Instant responses with typing indicators
@@ -35,6 +39,7 @@
 ## 🚀 **What's New in Enhanced Version**
 
 ### **Dramatically Improved UI**
+
 - ✅ **Modern Glass Morphism** - Stunning translucent design
 - ✅ **Advanced Animations** - 15+ custom CSS animations
 - ✅ **Dynamic Gradients** - Animated background effects
@@ -42,6 +47,7 @@
 - ✅ **Interactive Elements** - Hover, focus, and click animations
 
 ### **Expanded Functionality**
+
 - ✅ **8 vs 5 Clubs** - More diverse options
 - ✅ **8 vs 5 Events** - More activities to discover
 - ✅ **Club Ratings & Reviews** - Star ratings and member feedback
@@ -50,6 +56,7 @@
 - ✅ **Achievement Systems** - Club accomplishments and awards
 
 ### **AI Intelligence Boost**
+
 - ✅ **Smarter Responses** - More detailed, helpful answers
 - ✅ **Interest-Based Matching** - Better club recommendations
 - ✅ **Event Promotion Generator** - Professional marketing content
@@ -60,35 +67,36 @@
 
 ### 🏛️ **Available Clubs (8 Total)**
 
-| Club | Category | Members | Rating | Leader |
-|------|----------|---------|--------|--------|
-| 🖥️ Coding Club | Technology | 145 | 4.8⭐ | Alex Johnson |
-| 🎵 Music Club | Arts | 89 | 4.7⭐ | Sarah Chen |
-| 🤖 Robotics Club | Engineering | 67 | 4.9⭐ | Mike Rodriguez |
-| 📸 Photography Club | Arts | 78 | 4.6⭐ | Emma Davis |
-| 🎤 Debate Society | Academic | 54 | 4.5⭐ | David Park |
-| 🌱 Environmental Club | Social Impact | 92 | 4.8⭐ | Luna Green |
-| 💡 Entrepreneurship Club | Business | 76 | 4.7⭐ | James Wilson |
-| 🎮 Gaming Club | Gaming | 134 | 4.9⭐ | Ryan Kim |
+| Club                     | Category      | Members | Rating | Leader         |
+| ------------------------ | ------------- | ------- | ------ | -------------- |
+| 🖥️ Coding Club           | Technology    | 145     | 4.8⭐  | Alex Johnson   |
+| 🎵 Music Club            | Arts          | 89      | 4.7⭐  | Sarah Chen     |
+| 🤖 Robotics Club         | Engineering   | 67      | 4.9⭐  | Mike Rodriguez |
+| 📸 Photography Club      | Arts          | 78      | 4.6⭐  | Emma Davis     |
+| 🎤 Debate Society        | Academic      | 54      | 4.5⭐  | David Park     |
+| 🌱 Environmental Club    | Social Impact | 92      | 4.8⭐  | Luna Green     |
+| 💡 Entrepreneurship Club | Business      | 76      | 4.7⭐  | James Wilson   |
+| 🎮 Gaming Club           | Gaming        | 134     | 4.9⭐  | Ryan Kim       |
 
 **Total Active Members:** 735+ across all clubs
 
 ### 🗓️ **Upcoming Events (8 Total)**
 
-| Event | Date | Club | Type | Registrations |
-|-------|------|------|------|---------------|
-| 🏆 Hackathon 2025: AI Revolution | Aug 25 | Coding Club | Competition | 156/200 |
-| 🎤 Open Mic Night: Acoustic Vibes | Aug 22 | Music Club | Performance | 23/50 |
-| ⚔️ Robot Battle Championship | Aug 30 | Robotics Club | Competition | 28/32 |
-| 📷 Photography Workshop: Portraits | Aug 20 | Photography Club | Workshop | 18/25 |
-| 💼 Startup Pitch Competition | Aug 26 | Entrepreneurship Club | Competition | 12/15 |
-| 🎮 Esports Tournament: LoL | Aug 24 | Gaming Club | Competition | 35/40 |
-| 🌍 Climate Action Summit | Aug 23 | Environmental Club | Summit | 189/300 |
-| 🎯 Parliamentary Debate Championship | Aug 27 | Debate Society | Competition | 20/24 |
+| Event                                | Date   | Club                  | Type        | Registrations |
+| ------------------------------------ | ------ | --------------------- | ----------- | ------------- |
+| 🏆 Hackathon 2025: AI Revolution     | Aug 25 | Coding Club           | Competition | 156/200       |
+| 🎤 Open Mic Night: Acoustic Vibes    | Aug 22 | Music Club            | Performance | 23/50         |
+| ⚔️ Robot Battle Championship         | Aug 30 | Robotics Club         | Competition | 28/32         |
+| 📷 Photography Workshop: Portraits   | Aug 20 | Photography Club      | Workshop    | 18/25         |
+| 💼 Startup Pitch Competition         | Aug 26 | Entrepreneurship Club | Competition | 12/15         |
+| 🎮 Esports Tournament: LoL           | Aug 24 | Gaming Club           | Competition | 35/40         |
+| 🌍 Climate Action Summit             | Aug 23 | Environmental Club    | Summit      | 189/300       |
+| 🎯 Parliamentary Debate Championship | Aug 27 | Debate Society        | Competition | 20/24         |
 
 ## 🎯 **Sample Conversations**
 
 ### **Club Discovery**
+
 ```
 User: "I'm interested in technology"
 ClubMate: "🖥️ Perfect for Tech Enthusiasts!
@@ -110,6 +118,7 @@ Interested in joining or learning more? 🎯"
 ```
 
 ### **Event Exploration**
+
 ```
 User: "What events are happening this week?"
 ClubMate: "🗓️ Exciting Upcoming Events:
@@ -130,6 +139,7 @@ Which event catches your eye? Want registration details? 🎯"
 ```
 
 ### **AI Promotion Generator**
+
 ```
 User: "Create a promotion for the hackathon"
 ClubMate: "🎨 Event Promotion Generator Activated!
@@ -153,6 +163,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 ## 🛠️ **Technical Architecture**
 
 ### **Frontend Stack**
+
 - **React 18** - Modern hooks-based architecture
 - **Tailwind CSS** - Utility-first styling framework
 - **Lucide React** - Beautiful, consistent icons
@@ -160,6 +171,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 - **Responsive Design** - Mobile-first approach
 
 ### **Backend Stack**
+
 - **Node.js & Express** - High-performance server
 - **Google Gemini AI** - Advanced language model
 - **CORS & Helmet** - Security and cross-origin support
@@ -167,6 +179,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 - **Environment Variables** - Secure configuration
 
 ### **Key Features**
+
 - **Real-time Chat** - Instant AI responses
 - **Context Persistence** - Conversation memory
 - **Error Handling** - Graceful fallbacks
@@ -176,6 +189,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 ## 🚀 **Getting Started**
 
 ### **Prerequisites**
+
 - Node.js (v16 or higher)
 - npm or yarn package manager
 - Google Gemini API key (optional - works with fallbacks)
@@ -183,6 +197,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 ### **Quick Setup**
 
 1. **Clone & Install**
+
    ```bash
    git clone <repository-url>
    cd codesphere
@@ -191,6 +206,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
    ```
 
 2. **Configure Environment**
+
    ```bash
    # In backend directory
    cp .env.example .env
@@ -198,11 +214,12 @@ ClubMate: "🎨 Event Promotion Generator Activated!
    ```
 
 3. **Start Development Servers**
+
    ```bash
    # Terminal 1: Backend
    cd backend && npm start
 
-   # Terminal 2: Frontend  
+   # Terminal 2: Frontend
    cd frontend && npm start
    ```
 
@@ -214,6 +231,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 ## 🎨 **UI Showcase**
 
 ### **Modern Design Elements**
+
 - 🌟 **Glass Morphism Cards** - Translucent, blurred backgrounds
 - 🎭 **Gradient Animations** - Smooth color transitions
 - ✨ **Micro-interactions** - Hover effects and animations
@@ -221,6 +239,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 - 📱 **Responsive Layout** - Perfect on all devices
 
 ### **Interactive Components**
+
 - 💬 **Animated Chat Bubbles** - Smooth message animations
 - 🎪 **Quick Action Buttons** - Instant query shortcuts
 - ❤️ **Favorite System** - Heart animations for likes
@@ -238,6 +257,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 ## 🔮 **Future Enhancements**
 
 ### **Planned Features**
+
 - 🗃️ **Database Integration** - Persistent data storage
 - 👤 **User Profiles** - Personal preferences and history
 - 📅 **Calendar Sync** - Google Calendar integration
@@ -246,6 +266,7 @@ ClubMate: "🎨 Event Promotion Generator Activated!
 - 🎙️ **Voice Input** - Speech-to-text functionality
 
 ### **Advanced AI Features**
+
 - 🧠 **Machine Learning** - Predictive recommendations
 - 📝 **Natural Language** - Better conversation flow
 - 🎯 **Personalization** - User behavior analysis
@@ -269,11 +290,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 **Support & Troubleshooting**
 
 ### **Common Issues**
+
 - **API Key Problems** - App works with fallback responses
 - **Network Issues** - Check if both servers are running
 - **Browser Compatibility** - Use modern browsers (Chrome, Firefox, Safari)
 
 ### **Getting Help**
+
 - 📧 **Email Support** - clubmate@campus.edu
 - 💬 **Discord Community** - #clubmate-support
 - 📖 **Documentation** - See our [Wiki](wiki)
@@ -281,6 +304,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🎉 **Success Metrics**
 
 ### ✅ **Enhanced Features Delivered**
+
 - **Modern UI** - Glass morphism, animations, gradients
 - **Rich Data** - 8 clubs, 8 events, detailed information
 - **Smart AI** - Context-aware, intelligent responses
@@ -288,6 +312,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Performance** - Fast, responsive, accessible
 
 ### 🎯 **User Experience Goals Met**
+
 - **Intuitive Interface** - Easy to navigate and understand
 - **Engaging Interactions** - Fun animations and effects
 - **Helpful Responses** - Detailed, actionable information
@@ -298,4 +323,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **ClubMate Enhanced** - Where AI meets campus life! 🎓✨🤖
 
-*Built with ❤️ for students, by students*
+_Built with ❤️ for students, by students_

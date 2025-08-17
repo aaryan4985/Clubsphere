@@ -1,7 +1,7 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import ClubMate from './components/ClubMate';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import ClubMate from "./components/ClubMate";
 
 function App() {
   return (
@@ -11,14 +11,14 @@ function App() {
           <Route path="/" element={<ClubMate />} />
           <Route path="*" element={<ClubMate />} />
         </Routes>
-        <Toaster 
+        <Toaster
           position="top-right"
           toastOptions={{
             duration: 3000,
             style: {
-              background: '#363636',
-              color: '#fff',
-              borderRadius: '12px',
+              background: "#363636",
+              color: "#fff",
+              borderRadius: "12px",
             },
           }}
         />
