@@ -4,12 +4,15 @@ import { Send, Bot, User, Mic, MicOff } from "lucide-react";
 // Markdown renderer function for bot messages
 const renderMarkdown = (text) => {
   // Convert **text** to bold with better styling
-  let rendered = text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>');
-  
+  let rendered = text.replace(
+    /\*\*(.*?)\*\*/g,
+    '<strong class="font-semibold text-gray-900">$1</strong>'
+  );
+
   // Convert line breaks to proper spacing
-  rendered = rendered.replace(/\n\n/g, '<br/><br/>');
-  rendered = rendered.replace(/\n/g, '<br/>');
-  
+  rendered = rendered.replace(/\n\n/g, "<br/><br/>");
+  rendered = rendered.replace(/\n/g, "<br/>");
+
   return rendered;
 };
 
@@ -682,7 +685,7 @@ const ClubMate = () => {
       <div className="w-80 bg-white/95 backdrop-blur-sm border-r border-gray-200/50 flex flex-col overflow-hidden shadow-xl">
         <div className="p-6 border-b border-gray-100/80 bg-gradient-to-r from-blue-500 to-purple-600">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-white text-lg">📊 Campus Hub</h3>
+            <h3 className="font-bold text-white text-lg">🌟 ClubSphere </h3>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               <span className="text-white/90 text-xs font-medium">LIVE</span>
@@ -947,10 +950,10 @@ const ClubMate = () => {
                         {message.content}
                       </p>
                     ) : (
-                      <div 
+                      <div
                         className="text-sm leading-relaxed font-inter font-normal"
-                        dangerouslySetInnerHTML={{ 
-                          __html: renderMarkdown(message.content) 
+                        dangerouslySetInnerHTML={{
+                          __html: renderMarkdown(message.content),
                         }}
                       />
                     )}
