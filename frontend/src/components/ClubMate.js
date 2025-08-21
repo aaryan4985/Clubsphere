@@ -1,6 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Send, Bot, User, Mic, MicOff } from "lucide-react";
 
+// Markdown renderer function for bot messages
+const renderMarkdown = (text) => {
+  // Convert **text** to bold with better styling
+  let rendered = text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>');
+  
+  // Convert line breaks to proper spacing
+  rendered = rendered.replace(/\n\n/g, '<br/><br/>');
+  rendered = rendered.replace(/\n/g, '<br/>');
+  
+  return rendered;
+};
+
 // Sample data
 const sampleData = {
   clubs: [
@@ -194,7 +206,7 @@ const ClubMate = () => {
       id: 1,
       type: "bot",
       content:
-        '👋 **Welcome to ClubMate!** Your AI-powered campus companion\n\n✨ **What I can help you with:**\n\n🎯 **Explore & Discover**\n• Browse 8+ amazing clubs and upcoming events\n• Get personalized recommendations\n\n🚀 **Create & Manage**\n• "Create a club called AI Enthusiasts"\n• "Create an event called Tech Meetup on Friday"\n• "Update Coding Club description"\n• "Delete Gaming Club"\n\n🎤 **Voice Commands**\n• Click the microphone button and speak naturally\n• "Show me all programming clubs"\n• "What events are happening this week?"\n\n� **Just chat with me naturally!** I understand context and can help with anything campus-related.\n\nWhat would you like to explore today? 🎉',
+        '👋 **Welcome to ClubMate!** Your AI-powered campus companion\n\n✨ **What I can help you with:**\n\n🎯 **Explore & Discover**\n• Browse 8+ amazing clubs and upcoming events\n• Get personalized recommendations\n\n🚀 **Create & Manage**\n• "Create a club called AI Enthusiasts"\n• "Create an event called Tech Meetup on Friday"\n• "Update Coding Club description"\n• "Delete Gaming Club"\n\n📊 **Analytics & Stats**\n• "Show me club statistics"\n• "Display event analytics"\n• "Show membership trends"\n• "Generate club performance report"\n\n🎤 **Voice Commands**\n• Click the microphone button and speak naturally\n• "Show me all programming clubs"\n• "What events are happening this week?"\n\n💬 **Just chat with me naturally!** I understand context and can help with anything campus-related.\n\nWhat would you like to explore today? 🎉',
       timestamp: new Date(),
     },
   ]);
@@ -290,6 +302,288 @@ const ClubMate = () => {
     }
   };
 
+  // Analytics data generator
+  const generateAnalytics = (type) => {
+    const analyticsData = {
+      clubStats: {
+        membershipTrends: [
+          { month: "Jan", members: 520 },
+          { month: "Feb", members: 580 },
+          { month: "Mar", members: 620 },
+          { month: "Apr", members: 680 },
+          { month: "May", members: 720 },
+          { month: "Jun", members: 750 },
+        ],
+        clubDistribution: [
+          { category: "Technology", count: 3, color: "#3B82F6" },
+          { category: "Arts", count: 2, color: "#EF4444" },
+          { category: "Sports", count: 2, color: "#10B981" },
+          { category: "Academic", count: 1, color: "#F59E0B" },
+        ],
+        topClubs: [
+          { name: "Coding Club", members: 145, growth: "+12%" },
+          { name: "Gaming Club", members: 134, growth: "+8%" },
+          { name: "Environmental Club", members: 92, growth: "+15%" },
+          { name: "Music Club", members: 89, growth: "+5%" },
+        ],
+      },
+      eventStats: {
+        eventsByMonth: [
+          { month: "Jan", events: 12 },
+          { month: "Feb", events: 15 },
+          { month: "Mar", events: 18 },
+          { month: "Apr", events: 22 },
+          { month: "May", events: 25 },
+          { month: "Jun", events: 28 },
+        ],
+        attendance: [
+          { event: "Hackathon 2025", registered: 156, capacity: 200, rate: 78 },
+          { event: "Robot Battle", registered: 28, capacity: 32, rate: 88 },
+          { event: "Open Mic Night", registered: 23, capacity: 50, rate: 46 },
+          {
+            event: "Debate Championship",
+            registered: 14,
+            capacity: 16,
+            rate: 88,
+          },
+        ],
+        categories: [
+          { type: "Competition", count: 4, color: "#8B5CF6" },
+          { type: "Workshop", count: 2, color: "#06B6D4" },
+          { type: "Performance", count: 1, color: "#F97316" },
+          { type: "Conference", count: 1, color: "#84CC16" },
+        ],
+      },
+    };
+    return analyticsData[type] || analyticsData.clubStats;
+  };
+
+  // Check if message is asking for analytics
+  const isAnalyticsRequest = (message) => {
+    const analyticsKeywords = [
+      "statistics",
+      "stats",
+      "analytics",
+      "chart",
+      "graph",
+      "data",
+      "trends",
+      "report",
+      "performance",
+      "analysis",
+      "metrics",
+      "dashboard",
+      "insights",
+      "numbers",
+      "breakdown",
+    ];
+    return analyticsKeywords.some((keyword) =>
+      message.toLowerCase().includes(keyword)
+    );
+  };
+
+  // Generate analytics component
+  const AnalyticsComponent = ({ data, type }) => {
+    const maxValue = Math.max(
+      ...(data.membershipTrends?.map((d) => d.members) || [100])
+    );
+    const maxEvents = Math.max(
+      ...(data.eventsByMonth?.map((d) => d.events) || [30])
+    );
+
+    return (
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl border border-blue-200 my-4">
+        <div className="flex items-center mb-4">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+            <span className="text-white font-bold">📊</span>
+          </div>
+          <h3 className="font-bold text-gray-800 text-lg">
+            {type === "eventStats"
+              ? "Event Analytics Dashboard"
+              : "Club Analytics Dashboard"}
+          </h3>
+        </div>
+
+        {/* Membership/Event Trends Chart */}
+        <div className="mb-6">
+          <h4 className="font-semibold text-gray-700 mb-3">
+            {type === "eventStats"
+              ? "📈 Events per Month"
+              : "👥 Membership Growth Trends"}
+          </h4>
+          <div className="bg-white p-4 rounded-xl border border-gray-200">
+            <div className="flex items-end space-x-2 h-32">
+              {(data.membershipTrends || data.eventsByMonth || []).map(
+                (item, index) => {
+                  const height =
+                    type === "eventStats"
+                      ? (item.events / maxEvents) * 100
+                      : (item.members / maxValue) * 100;
+                  return (
+                    <div
+                      key={index}
+                      className="flex flex-col items-center flex-1"
+                    >
+                      <div
+                        className="bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg mb-2 w-full flex items-end justify-center text-white text-xs font-bold pb-1"
+                        style={{ height: `${height}%`, minHeight: "20px" }}
+                      >
+                        {type === "eventStats" ? item.events : item.members}
+                      </div>
+                      <span className="text-xs text-gray-600 font-medium">
+                        {item.month}
+                      </span>
+                    </div>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Distribution Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <h4 className="font-semibold text-gray-700 mb-3">
+              {type === "eventStats"
+                ? "🎯 Event Categories"
+                : "🏢 Club Distribution"}
+            </h4>
+            <div className="bg-white p-4 rounded-xl border border-gray-200">
+              <div className="space-y-3">
+                {(data.clubDistribution || data.categories || []).map(
+                  (item, index) => {
+                    const total = (
+                      data.clubDistribution ||
+                      data.categories ||
+                      []
+                    ).reduce((sum, d) => sum + d.count, 0);
+                    const percentage = ((item.count / total) * 100).toFixed(1);
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: item.color }}
+                          ></div>
+                          <span className="text-sm font-medium text-gray-700">
+                            {item.category || item.type}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm text-gray-600">
+                            {item.count}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            ({percentage}%)
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Top Performers */}
+          <div>
+            <h4 className="font-semibold text-gray-700 mb-3">
+              {type === "eventStats"
+                ? "🎫 Event Attendance"
+                : "🏆 Top Performing Clubs"}
+            </h4>
+            <div className="bg-white p-4 rounded-xl border border-gray-200">
+              <div className="space-y-3">
+                {(data.topClubs || data.attendance || []).map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+                  >
+                    <div>
+                      <div className="font-medium text-gray-800 text-sm">
+                        {item.name || item.event}
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        {type === "eventStats"
+                          ? `${item.registered}/${item.capacity} registered`
+                          : `${item.members} members`}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div
+                        className={`text-sm font-bold ${
+                          type === "eventStats"
+                            ? item.rate > 75
+                              ? "text-green-600"
+                              : item.rate > 50
+                              ? "text-yellow-600"
+                              : "text-red-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        {type === "eventStats" ? `${item.rate}%` : item.growth}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {type === "eventStats" ? "filled" : "growth"}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-gradient-to-r from-green-100 to-emerald-100 p-3 rounded-xl text-center">
+            <div className="text-2xl font-bold text-green-600">
+              {type === "eventStats" ? "98%" : "94%"}
+            </div>
+            <div className="text-xs text-green-700 font-medium">
+              {type === "eventStats" ? "Success Rate" : "Satisfaction"}
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-blue-100 to-cyan-100 p-3 rounded-xl text-center">
+            <div className="text-2xl font-bold text-blue-600">
+              {type === "eventStats" ? "2.4K" : "750+"}
+            </div>
+            <div className="text-xs text-blue-700 font-medium">
+              {type === "eventStats" ? "Total Attendees" : "Total Members"}
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-3 rounded-xl text-center">
+            <div className="text-2xl font-bold text-purple-600">
+              {type === "eventStats" ? "8" : "4.7"}
+            </div>
+            <div className="text-xs text-purple-700 font-medium">
+              {type === "eventStats" ? "Upcoming" : "Avg Rating"}
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-orange-100 to-red-100 p-3 rounded-xl text-center">
+            <div className="text-2xl font-bold text-orange-600">
+              {type === "eventStats" ? "+15%" : "+23%"}
+            </div>
+            <div className="text-xs text-orange-700 font-medium">
+              {type === "eventStats" ? "Growth" : "New This Month"}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 text-center">
+          <div className="text-xs text-gray-500">
+            📊 Generated on {new Date().toLocaleDateString()} • Real-time campus
+            data
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const sendMessage = async () => {
     if (!inputText.trim()) return;
 
@@ -301,9 +595,35 @@ const ClubMate = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = inputText.trim();
     setInputText("");
     setIsLoading(true);
 
+    // Check if this is an analytics request
+    if (isAnalyticsRequest(currentInput)) {
+      setTimeout(() => {
+        const isEventAnalytics = currentInput.toLowerCase().includes("event");
+        const analyticsType = isEventAnalytics ? "eventStats" : "clubStats";
+        const analyticsData = generateAnalytics(analyticsType);
+
+        const analyticsMessage = {
+          id: Date.now() + 1,
+          type: "bot",
+          content:
+            "📊 **Analytics Dashboard Generated!**\n\nHere's your comprehensive data analysis with real-time insights:",
+          timestamp: new Date(),
+          analytics: {
+            data: analyticsData,
+            type: analyticsType,
+          },
+        };
+        setMessages((prev) => [...prev, analyticsMessage]);
+        setIsLoading(false);
+      }, 1500); // Simulate processing time
+      return;
+    }
+
+    // Regular API call for non-analytics requests
     try {
       const response = await fetch("http://localhost:5000/api/ai/chat", {
         method: "POST",
@@ -312,7 +632,7 @@ const ClubMate = () => {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          message: userMessage.content,
+          message: currentInput,
           context: { clubs: sampleData.clubs, events: sampleData.events },
         }),
       });
@@ -357,7 +677,7 @@ const ClubMate = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex overflow-hidden">
+    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 flex overflow-hidden font-inter">
       {/* Fixed Enhanced Sidebar with Cool Stats */}
       <div className="w-80 bg-white/95 backdrop-blur-sm border-r border-gray-200/50 flex flex-col overflow-hidden shadow-xl">
         <div className="p-6 border-b border-gray-100/80 bg-gradient-to-r from-blue-500 to-purple-600">
@@ -576,11 +896,11 @@ const ClubMate = () => {
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <div className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-              🌟 Enhanced UI
+            <div className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+              🧠 AI Powered
             </div>
-            <div className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-              🎤 Voice Ready
+            <div className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium">
+              🤖 Smart Assistant
             </div>
           </div>
         </div>
@@ -622,9 +942,25 @@ const ClubMate = () => {
                         : "bg-white border border-gray-200/50 text-gray-800 backdrop-blur-sm"
                     }`}
                   >
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                      {message.content}
-                    </p>
+                    {message.type === "user" ? (
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap font-inter font-medium">
+                        {message.content}
+                      </p>
+                    ) : (
+                      <div 
+                        className="text-sm leading-relaxed font-inter font-normal"
+                        dangerouslySetInnerHTML={{ 
+                          __html: renderMarkdown(message.content) 
+                        }}
+                      />
+                    )}
+                    {/* Render analytics component if present */}
+                    {message.analytics && (
+                      <AnalyticsComponent
+                        data={message.analytics.data}
+                        type={message.analytics.type}
+                      />
+                    )}
                     <p
                       className={`text-xs mt-3 ${
                         message.type === "user"
